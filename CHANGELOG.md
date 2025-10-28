@@ -1,281 +1,281 @@
-# Changelog
+# Nhật Ký Thay Đổi
 
-All notable changes to the KPI Management System will be documented in this file.
+Tất cả các thay đổi đáng chú ý của Hệ Thống Quản Lý KPI sẽ được ghi lại trong file này.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+Format dựa trên [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+và dự án này tuân theo [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [Unreleased]
+## [Unreleased] - Chưa Phát Hành
 
-### Planned Features
-- Real-time notifications via WebSocket
-- Advanced analytics with BI dashboards
-- Mobile app (React Native)
-- Multi-language support
+### Tính Năng Dự Kiến
+- Thông báo real-time qua WebSocket
+- Dashboard analytics nâng cao với BI
+- Ứng dụng mobile (React Native)
+- Hỗ trợ đa ngôn ngữ
 - Dark mode
-- Custom themes
-- Integration with HR systems
-- API rate limiting
-- Advanced search with full-text search
+- Themes tùy chỉnh
+- Tích hợp với hệ thống HR
+- Giới hạn tốc độ API (rate limiting)
+- Tìm kiếm nâng cao với full-text search
 
 ---
 
 ## [1.0.0] - 2024-01-01
 
-### Initial Release
+### Phát Hành Chính Thức
 
-Complete KPI Management System with all core features.
+Hệ Thống Quản Lý KPI hoàn chỉnh với tất cả tính năng cốt lõi.
 
-#### Added
+#### Đã Thêm
 
-**Phase 1: Core Infrastructure**
-- FastAPI backend with Python 3.11+
-- React 18+ frontend with Vite
-- SQLite3 database
-- JWT authentication system
-- Role-based access control (Admin, Manager, Employee)
-- Docker Compose deployment configuration
-- Nginx reverse proxy setup
-- Environment variables configuration
-- Logging system
-- Health check endpoints
+**Phase 1: Hạ Tầng Cốt Lõi**
+- Backend FastAPI với Python 3.11+
+- Frontend React 18+ với Vite
+- Cơ sở dữ liệu SQLite3
+- Hệ thống xác thực JWT
+- Kiểm soát truy cập dựa trên vai trò (Admin, Manager, Employee)
+- Cấu hình deployment Docker Compose
+- Thiết lập Nginx reverse proxy
+- Cấu hình biến môi trường
+- Hệ thống logging
+- Endpoints kiểm tra sức khỏe
 
-**Phase 2: KPI Management**
-- KPI CRUD operations
-- KPI templates system
-- Dashboard with statistics
-- KPI list with filters (year, quarter, status, user)
-- KPI detail view
-- Progress tracking
-- Status workflow (draft → submitted → approved/rejected)
-- Search functionality
-- History/audit trail
+**Phase 2: Quản Lý KPI**
+- Các thao tác CRUD cho KPI
+- Hệ thống templates KPI
+- Dashboard với thống kê
+- Danh sách KPI với bộ lọc (năm, quý, trạng thái, người dùng)
+- Trang chi tiết KPI
+- Theo dõi tiến độ
+- Workflow trạng thái (draft → submitted → approved/rejected)
+- Chức năng tìm kiếm
+- Lịch sử/audit trail
 
-**Phase 3: File Management**
-- File upload system (max 50MB)
-- Support for PDF, Office documents, images
-- File validation (type, size)
-- Secure file storage
-- File download
-- File preview
-- Evidence linking to KPIs
+**Phase 3: Quản Lý File**
+- Hệ thống upload file (tối đa 50MB)
+- Hỗ trợ PDF, tài liệu Office, hình ảnh
+- Validation file (loại, kích thước)
+- Lưu trữ file bảo mật
+- Download file
+- Xem trước file
+- Liên kết minh chứng với KPI
 
-**Phase 4: Workflow & Collaboration**
-- Approval workflow
-- Submit KPI for approval
-- Approve/reject with comments
-- Comment system
-- Activity timeline
-- Notification system
-- In-app notifications
-- Email notifications (optional)
+**Phase 4: Workflow & Cộng Tác**
+- Workflow phê duyệt
+- Gửi KPI để phê duyệt
+- Phê duyệt/từ chối với bình luận
+- Hệ thống bình luận
+- Timeline hoạt động
+- Hệ thống thông báo
+- Thông báo trong ứng dụng
+- Thông báo email (tùy chọn)
 
-**Phase 5: Reporting & Analytics**
-- PDF report generation
-- Excel export
-- User reports
-- Department reports
-- Company-wide reports (Admin only)
+**Phase 5: Báo Cáo & Phân Tích**
+- Tạo báo cáo PDF
+- Xuất Excel
+- Báo cáo người dùng
+- Báo cáo phòng ban
+- Báo cáo toàn công ty (chỉ Admin)
 - Dashboard analytics
-- Progress charts
-- Completion rates
-- Department comparison
+- Biểu đồ tiến độ
+- Tỷ lệ hoàn thành
+- So sánh phòng ban
 
-**Phase 6: Admin Features**
-- User management (CRUD)
-- Template management
-- System settings
-- Manual backup trigger
-- Backup list and restore
-- Audit log viewer
-- User activation/deactivation
-- Password reset
+**Phase 6: Tính Năng Admin**
+- Quản lý người dùng (CRUD)
+- Quản lý templates
+- Cài đặt hệ thống
+- Kích hoạt backup thủ công
+- Danh sách backup và khôi phục
+- Trình xem audit log
+- Kích hoạt/vô hiệu hóa người dùng
+- Đặt lại mật khẩu
 
-**Phase 7: Optimization & Polish**
-- Database indexing
-- Query optimization
-- Pagination improvements
-- Automated daily backups
-- Background jobs with APScheduler
-- Responsive design (mobile-friendly)
+**Phase 7: Tối Ưu & Hoàn Thiện**
+- Indexing cơ sở dữ liệu
+- Tối ưu hóa queries
+- Cải thiện pagination
+- Backup tự động hàng ngày
+- Background jobs với APScheduler
+- Responsive design (thân thiện với mobile)
 - Loading states
-- Error handling
+- Xử lý lỗi
 - Empty states
-- API documentation (Swagger UI)
+- Tài liệu API (Swagger UI)
 
-#### Security
-- JWT token authentication
-- bcrypt password hashing
+#### Bảo Mật
+- Xác thực JWT token
+- Hash mật khẩu bcrypt
 - RBAC (Role-Based Access Control)
-- File upload validation
-- SQL injection prevention
-- XSS protection
-- CORS configuration
-- Secure file storage
-- Session management
+- Validation upload file
+- Ngăn chặn SQL injection
+- Bảo vệ XSS
+- Cấu hình CORS
+- Lưu trữ file bảo mật
+- Quản lý session
 
-#### Documentation
-- Complete README.md
-- Quick Start Guide
-- API Specification
-- Architecture documentation
-- Deployment guide
-- Contributing guidelines
-- Environment variables documentation
-- Docker Compose configurations
+#### Tài Liệu
+- README.md hoàn chỉnh
+- Hướng Dẫn Nhanh
+- Đặc Tả API
+- Tài liệu kiến trúc
+- Hướng dẫn deployment
+- Hướng dẫn đóng góp
+- Tài liệu biến môi trường
+- Cấu hình Docker Compose
 
 #### Testing
-- Backend unit tests (pytest)
-- API endpoint tests
-- Authentication tests
-- Manual testing checklist
-- Test coverage reporting
+- Unit tests backend (pytest)
+- Tests API endpoints
+- Tests xác thực
+- Checklist testing thủ công
+- Báo cáo test coverage
 
 ---
 
-## Version History
+## Lịch Sử Phiên Bản
 
-### Version Numbering
+### Đánh Số Phiên Bản
 
-We use Semantic Versioning (MAJOR.MINOR.PATCH):
-- **MAJOR**: Incompatible API changes
-- **MINOR**: New features (backwards-compatible)
-- **PATCH**: Bug fixes (backwards-compatible)
+Chúng tôi sử dụng Semantic Versioning (MAJOR.MINOR.PATCH):
+- **MAJOR**: Thay đổi API không tương thích
+- **MINOR**: Tính năng mới (tương thích ngược)
+- **PATCH**: Sửa lỗi (tương thích ngược)
 
-### Release Schedule
+### Lịch Trình Phát Hành
 
-- **Major releases**: Annually or when breaking changes are needed
-- **Minor releases**: Quarterly or when new features are ready
-- **Patch releases**: As needed for bug fixes
+- **Phát hành Major**: Hàng năm hoặc khi cần breaking changes
+- **Phát hành Minor**: Theo quý hoặc khi tính năng mới sẵn sàng
+- **Phát hành Patch**: Khi cần sửa lỗi
 
 ---
 
 ## [0.9.0] - 2024-12-15 (Beta)
 
-### Added
-- Beta testing phase
-- Core features complete
-- Internal testing with 5 users
+### Đã Thêm
+- Giai đoạn beta testing
+- Tính năng cốt lõi hoàn thành
+- Testing nội bộ với 5 người dùng
 
-### Fixed
-- Various bug fixes from testing
-- Performance improvements
-- UI/UX refinements
+### Đã Sửa
+- Nhiều sửa lỗi từ testing
+- Cải thiện hiệu suất
+- Tinh chỉnh UI/UX
 
 ---
 
 ## [0.8.0] - 2024-12-01 (Alpha)
 
-### Added
-- Alpha release with most features
-- Phase 1-6 completed
-- Basic testing
+### Đã Thêm
+- Phát hành alpha với hầu hết tính năng
+- Hoàn thành Phase 1-6
+- Testing cơ bản
 
 ---
 
-## [0.1.0] - 2024-11-01 (Development Start)
+## [0.1.0] - 2024-11-01 (Bắt Đầu Phát Triển)
 
-### Added
-- Project initialization
-- Repository setup
-- Documentation started
-- Development environment configured
-
----
-
-## Upgrade Guide
-
-### From 0.x to 1.0.0
-
-This is the first stable release. No upgrade path needed.
-
-For future upgrades, see specific version notes below.
+### Đã Thêm
+- Khởi tạo dự án
+- Thiết lập repository
+- Bắt đầu tài liệu
+- Cấu hình môi trường development
 
 ---
 
-## Breaking Changes
+## Hướng Dẫn Nâng Cấp
+
+### Từ 0.x lên 1.0.0
+
+Đây là phiên bản stable đầu tiên. Không cần migration path.
+
+Cho các nâng cấp tương lai, xem ghi chú phiên bản cụ thể bên dưới.
+
+---
+
+## Breaking Changes (Thay Đổi Không Tương Thích)
 
 ### 1.0.0
-- Initial release - no breaking changes
+- Phát hành ban đầu - không có breaking changes
 
 ---
 
-## Deprecations
+## Deprecations (Tính Năng Lỗi Thời)
 
-None in current version.
+Không có trong phiên bản hiện tại.
 
 ---
 
-## Migration Notes
+## Ghi Chú Migration
 
-### Fresh Installation
+### Cài Đặt Mới
 
-For new installations, follow the [Quick Start Guide](./QUICK_START_GUIDE.md):
+Cho cài đặt mới, làm theo [Hướng Dẫn Nhanh](./QUICK_START_GUIDE.md):
 
 ```bash
 # 1. Clone repository
 git clone https://github.com/your-org/kpi-system.git
 
-# 2. Configure environment
+# 2. Cấu hình môi trường
 cp .env.example .env
-# Edit .env with your settings
+# Chỉnh sửa .env với cài đặt của bạn
 
-# 3. Start services
+# 3. Khởi động services
 docker-compose up -d
 
-# 4. Initialize database
+# 4. Khởi tạo database
 docker-compose exec backend python scripts/init_db.py
 
-# 5. Create admin user
+# 5. Tạo admin user
 docker-compose exec backend python scripts/create_admin.py
 ```
 
 ---
 
-## Known Issues
+## Issues Đã Biết
 
 ### 1.0.0
 
 **Backend:**
-- None reported
+- Chưa có báo cáo
 
 **Frontend:**
-- None reported
+- Chưa có báo cáo
 
 **Deployment:**
-- None reported
+- Chưa có báo cáo
 
-For latest issues, check: [Issues Page](https://github.com/your-org/kpi-system/issues)
-
----
-
-## Contributing
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for how to contribute to this project.
+Cho issues mới nhất, xem: [Trang Issues](https://github.com/your-org/kpi-system/issues)
 
 ---
 
-## Support
+## Đóng Góp
 
-- **Documentation**: [./docs/](./docs/)
+Xem [CONTRIBUTING.md](./CONTRIBUTING.md) để biết cách đóng góp cho dự án này.
+
+---
+
+## Hỗ Trợ
+
+- **Tài liệu**: [./docs/](./docs/)
 - **Issues**: [GitHub Issues](https://github.com/your-org/kpi-system/issues)
 - **Email**: support@company.com
 
 ---
 
-## Acknowledgments
+## Lời Cảm Ơn
 
-### Contributors
+### Contributors (Người Đóng Góp)
 - Development Team
 - Testing Team
 - Documentation Team
 
-### Technologies
+### Công Nghệ
 - FastAPI - Web framework
 - React - Frontend framework
-- SQLite - Database
+- SQLite - Cơ sở dữ liệu
 - Docker - Containerization
 - Nginx - Web server
 
@@ -283,38 +283,38 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for how to contribute to this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+Dự án này được cấp phép theo giấy phép MIT License - xem file [LICENSE](./LICENSE) để biết chi tiết.
 
 ---
 
-## Statistics
+## Thống Kê
 
-### 1.0.0 Release
-- **Development Time**: 8 weeks
-- **Lines of Code**: ~15,000
+### Phát Hành 1.0.0
+- **Thời gian phát triển**: 8 tuần
+- **Dòng code**: ~15,000
 - **Tests**: 50+
 - **API Endpoints**: 50+
-- **Database Tables**: 8
-- **Documentation Pages**: 10+
+- **Bảng Database**: 8
+- **Trang tài liệu**: 10+
 
 ---
 
-## Future Roadmap
+## Lộ Trình Tương Lai
 
-### 2.0.0 (Planned Q2 2025)
-- Real-time notifications
-- Advanced analytics
-- Mobile app
-- Multi-language support
+### 2.0.0 (Dự kiến Q2 2025)
+- Thông báo real-time
+- Analytics nâng cao
+- Ứng dụng mobile
+- Hỗ trợ đa ngôn ngữ
 
-### 1.x Minor Releases
-- UI/UX improvements
-- Performance optimizations
-- Bug fixes
-- Security updates
+### Phát Hành 1.x Minor
+- Cải thiện UI/UX
+- Tối ưu hiệu suất
+- Sửa lỗi
+- Cập nhật bảo mật
 
 ---
 
-**Last Updated**: 2024-01-01
+**Cập nhật lần cuối**: 2024-01-01
 
-For questions about this changelog, contact: support@company.com
+Có câu hỏi về changelog này, liên hệ: support@company.com

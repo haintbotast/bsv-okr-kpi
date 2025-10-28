@@ -1,67 +1,67 @@
-# Contributing to KPI Management System
+# Đóng Góp Cho Hệ Thống Quản Lý KPI
 
-Thank you for your interest in contributing to the KPI Management System! This document provides guidelines and instructions for contributing to this project.
-
----
-
-## Table of Contents
-
-1. [Code of Conduct](#code-of-conduct)
-2. [Getting Started](#getting-started)
-3. [Development Workflow](#development-workflow)
-4. [Coding Standards](#coding-standards)
-5. [Testing Requirements](#testing-requirements)
-6. [Commit Guidelines](#commit-guidelines)
-7. [Pull Request Process](#pull-request-process)
-8. [Documentation](#documentation)
-9. [Reporting Issues](#reporting-issues)
+Cảm ơn bạn quan tâm đến việc đóng góp cho Hệ Thống Quản Lý KPI! Tài liệu này cung cấp hướng dẫn và quy trình để đóng góp cho dự án.
 
 ---
 
-## Code of Conduct
+## Mục Lục
 
-This project follows a standard code of conduct:
-
-- Be respectful and inclusive
-- Welcome newcomers
-- Focus on constructive feedback
-- Respect differing viewpoints
-- Prioritize the community's best interests
+1. [Quy Tắc Ứng Xử](#quy-tắc-ứng-xử)
+2. [Bắt Đầu](#bắt-đầu)
+3. [Quy Trình Phát Triển](#quy-trình-phát-triển)
+4. [Chuẩn Lập Trình](#chuẩn-lập-trình)
+5. [Yêu Cầu Testing](#yêu-cầu-testing)
+6. [Hướng Dẫn Commit](#hướng-dẫn-commit)
+7. [Quy Trình Pull Request](#quy-trình-pull-request)
+8. [Tài Liệu](#tài-liệu)
+9. [Báo Cáo Issues](#báo-cáo-issues)
 
 ---
 
-## Getting Started
+## Quy Tắc Ứng Xử
 
-### Prerequisites
+Dự án này tuân theo quy tắc ứng xử chuẩn:
 
-Before you begin, ensure you have:
+- Tôn trọng và hòa nhập
+- Chào đón người mới
+- Tập trung vào phản hồi mang tính xây dựng
+- Tôn trọng quan điểm khác nhau
+- Ưu tiên lợi ích tốt nhất của cộng đồng
 
-- **Git** installed
-- **Docker** and **Docker Compose** installed
-- **Python 3.11+** (for backend development)
-- **Node.js 18+** and **npm** (for frontend development)
-- A code editor (VS Code, PyCharm, etc.)
+---
 
-### Setting Up Development Environment
+## Bắt Đầu
+
+### Yêu Cầu
+
+Trước khi bắt đầu, đảm bảo bạn đã cài:
+
+- **Git**
+- **Docker** và **Docker Compose**
+- **Python 3.11+** (cho phát triển backend)
+- **Node.js 18+** và **npm** (cho phát triển frontend)
+- Code editor (VS Code, PyCharm, v.v.)
+
+### Thiết Lập Môi Trường Phát Triển
 
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/your-org/kpi-system.git
 cd kpi-system
 
-# Create environment file
+# Tạo file môi trường
 cp .env.example .env
-# Edit .env with your local settings
+# Chỉnh sửa .env với cài đặt local
 
-# Start development environment
+# Khởi động môi trường development
 docker-compose up -d
 
-# Or run locally:
+# Hoặc chạy locally:
 
 # Backend
 cd backend
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 
@@ -73,106 +73,106 @@ npm run dev
 
 ---
 
-## Development Workflow
+## Quy Trình Phát Triển
 
-### 1. Create a Branch
+### 1. Tạo Branch
 
-Always create a new branch for your changes:
+Luôn tạo branch mới cho thay đổi của bạn:
 
 ```bash
-git checkout -b feature/your-feature-name
-# or
-git checkout -b fix/bug-description
+git checkout -b feature/ten-tinh-nang
+# hoặc
+git checkout -b fix/mo-ta-bug
 ```
 
-Branch naming conventions:
-- `feature/` - New features
-- `fix/` - Bug fixes
-- `docs/` - Documentation updates
-- `refactor/` - Code refactoring
-- `test/` - Adding tests
-- `chore/` - Maintenance tasks
+Quy ước đặt tên branch:
+- `feature/` - Tính năng mới
+- `fix/` - Sửa bug
+- `docs/` - Cập nhật tài liệu
+- `refactor/` - Refactoring code
+- `test/` - Thêm tests
+- `chore/` - Công việc bảo trì
 
-### 2. Make Changes
+### 2. Thực Hiện Thay Đổi
 
-- Write clean, readable code
-- Follow the coding standards (see below)
-- Add tests for new features
-- Update documentation as needed
+- Viết code sạch, dễ đọc
+- Tuân theo chuẩn lập trình (xem bên dưới)
+- Thêm tests cho tính năng mới
+- Cập nhật tài liệu nếu cần
 
-### 3. Test Your Changes
+### 3. Test Thay Đổi
 
 ```bash
 # Backend tests
 cd backend
 pytest
 
-# Frontend tests (if configured)
+# Frontend tests (nếu có)
 cd frontend
 npm test
 
-# Full integration test
+# Integration test đầy đủ
 docker-compose up -d
-# Test manually in browser
+# Test thủ công trong browser
 ```
 
-### 4. Commit Your Changes
+### 4. Commit Thay Đổi
 
-Follow the commit guidelines (see below).
+Tuân theo hướng dẫn commit (xem bên dưới).
 
-### 5. Push and Create Pull Request
+### 5. Push và Tạo Pull Request
 
 ```bash
-git push origin feature/your-feature-name
+git push origin feature/ten-tinh-nang
 ```
 
-Then create a Pull Request on GitHub/GitLab.
+Sau đó tạo Pull Request trên GitHub/GitLab.
 
 ---
 
-## Coding Standards
+## Chuẩn Lập Trình
 
 ### Python (Backend)
 
-**Style Guide**: Follow PEP 8
+**Style Guide**: Tuân theo PEP 8
 
 ```python
-# Good
+# Tốt
 def calculate_progress(current: float, target: float) -> float:
-    """Calculate progress percentage.
+    """Tính phần trăm tiến độ.
 
     Args:
-        current: Current value
-        target: Target value
+        current: Giá trị hiện tại
+        target: Giá trị mục tiêu
 
     Returns:
-        Progress as percentage (0-100)
+        Tiến độ dạng phần trăm (0-100)
     """
     if target == 0:
         return 0
     return (current / target) * 100
 
-# Bad
+# Không tốt
 def calc(c,t):
     return c/t*100 if t!=0 else 0
 ```
 
-**Key Points**:
-- Use type hints
-- Write docstrings for functions/classes
-- Max line length: 100 characters
-- Use descriptive variable names
-- Follow FastAPI best practices
+**Điểm Quan Trọng**:
+- Dùng type hints
+- Viết docstrings cho functions/classes
+- Độ dài dòng tối đa: 100 ký tự
+- Dùng tên biến mô tả rõ ràng
+- Tuân theo best practices của FastAPI
 
 **Tools**:
 ```bash
 # Format code
 black app/
 
-# Check style
+# Kiểm tra style
 flake8 app/
 
-# Sort imports
+# Sắp xếp imports
 isort app/
 ```
 
@@ -181,22 +181,22 @@ isort app/
 **Style Guide**: Airbnb JavaScript Style Guide
 
 ```javascript
-// Good
+// Tốt
 const calculateProgress = (current, target) => {
   if (target === 0) return 0;
   return (current / target) * 100;
 };
 
-// Bad
+// Không tốt
 function calc(c,t){return t!=0?c/t*100:0}
 ```
 
-**Key Points**:
-- Use functional components with hooks
-- Use ESLint and Prettier
-- Use meaningful component names
-- Keep components small and focused
-- Add PropTypes or TypeScript types
+**Điểm Quan Trọng**:
+- Dùng functional components với hooks
+- Dùng ESLint và Prettier
+- Dùng tên component có ý nghĩa
+- Giữ components nhỏ và tập trung
+- Thêm PropTypes hoặc TypeScript types
 
 **Tools**:
 ```bash
@@ -206,31 +206,31 @@ npm run format
 # Lint code
 npm run lint
 
-# Fix lint issues
+# Sửa lỗi lint
 npm run lint:fix
 ```
 
-### General Guidelines
+### Hướng Dẫn Chung
 
 - **DRY** (Don't Repeat Yourself)
 - **KISS** (Keep It Simple, Stupid)
 - **YAGNI** (You Aren't Gonna Need It)
-- Write self-documenting code
-- Comment complex logic
-- Avoid premature optimization
+- Viết code tự giải thích
+- Comment cho logic phức tạp
+- Tránh tối ưu hóa sớm
 
 ---
 
-## Testing Requirements
+## Yêu Cầu Testing
 
 ### Backend Tests
 
-All backend changes should include tests:
+Tất cả thay đổi backend nên có tests:
 
 ```python
 # tests/test_kpi.py
 def test_create_kpi(client, test_user):
-    """Test KPI creation."""
+    """Test tạo KPI."""
     response = client.post(
         "/api/v1/kpis",
         json={
@@ -244,39 +244,39 @@ def test_create_kpi(client, test_user):
     assert response.json()["title"] == "Test KPI"
 ```
 
-**Coverage Target**: Aim for >70% code coverage
+**Mục tiêu Coverage**: Hướng tới >70% code coverage
 
 ```bash
 pytest --cov=app tests/
 ```
 
-### Frontend Tests (Optional)
+### Frontend Tests (Tùy chọn)
 
-If implementing frontend tests:
+Nếu implement frontend tests:
 
 ```javascript
 // KPICard.test.jsx
-test('renders KPI card with title', () => {
+test('renders KPI card với title', () => {
   render(<KPICard title="Test KPI" />);
   expect(screen.getByText('Test KPI')).toBeInTheDocument();
 });
 ```
 
-### Manual Testing Checklist
+### Checklist Testing Thủ Công
 
-Before submitting, manually test:
-- [ ] Feature works as expected
-- [ ] No console errors
-- [ ] Responsive on mobile
-- [ ] Works in Chrome, Firefox, Safari
-- [ ] Proper error handling
-- [ ] Loading states work
+Trước khi submit, test thủ công:
+- [ ] Tính năng hoạt động đúng
+- [ ] Không có lỗi console
+- [ ] Responsive trên mobile
+- [ ] Hoạt động trên Chrome, Firefox, Safari
+- [ ] Xử lý lỗi đúng
+- [ ] Loading states hoạt động
 
 ---
 
-## Commit Guidelines
+## Hướng Dẫn Commit
 
-### Commit Message Format
+### Format Commit Message
 
 ```
 <type>(<scope>): <subject>
@@ -287,130 +287,130 @@ Before submitting, manually test:
 ```
 
 **Types**:
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation changes
-- `style`: Code style changes (formatting)
-- `refactor`: Code refactoring
-- `test`: Adding tests
-- `chore`: Maintenance tasks
+- `feat`: Tính năng mới
+- `fix`: Sửa bug
+- `docs`: Thay đổi tài liệu
+- `style`: Thay đổi code style (format)
+- `refactor`: Refactoring code
+- `test`: Thêm tests
+- `chore`: Công việc bảo trì
 
-**Examples**:
+**Ví dụ**:
 
 ```bash
-feat(kpi): add quarterly progress tracking
+feat(kpi): thêm theo dõi tiến độ theo quý
 
-Implement progress calculation by quarter with automatic
-updates when evidence is uploaded.
+Implement tính toán tiến độ theo quý với cập nhật tự động
+khi upload minh chứng.
 
 Closes #123
 ```
 
 ```bash
-fix(auth): resolve token refresh race condition
+fix(auth): giải quyết race condition khi refresh token
 
-Fixed issue where multiple simultaneous refresh requests
-would fail. Added mutex lock to prevent concurrent refreshes.
+Fixed vấn đề khi nhiều requests refresh đồng thời sẽ fail.
+Thêm mutex lock để ngăn concurrent refreshes.
 
 Fixes #456
 ```
 
-**Rules**:
-- Use present tense ("add" not "added")
-- First line max 72 characters
+**Quy tắc**:
+- Dùng thì hiện tại ("add" không phải "added")
+- Dòng đầu tối đa 72 ký tự
 - Reference issue numbers
-- Explain "why" in body, not "what"
+- Giải thích "tại sao" trong body, không phải "cái gì"
 
 ---
 
-## Pull Request Process
+## Quy Trình Pull Request
 
-### Before Creating PR
+### Trước Khi Tạo PR
 
-1. ✅ Update from main branch
+1. ✅ Cập nhật từ main branch
    ```bash
    git checkout main
    git pull origin main
-   git checkout feature/your-feature
+   git checkout feature/tinh-nang-cua-ban
    git merge main
    ```
 
-2. ✅ Run all tests
-3. ✅ Update documentation
-4. ✅ Self-review your code
-5. ✅ Check for merge conflicts
+2. ✅ Chạy tất cả tests
+3. ✅ Cập nhật tài liệu
+4. ✅ Tự review code của bạn
+5. ✅ Kiểm tra merge conflicts
 
-### PR Template
+### Template PR
 
-When creating a PR, include:
+Khi tạo PR, bao gồm:
 
 ```markdown
-## Description
-Brief description of changes
+## Mô Tả
+Mô tả ngắn gọn về thay đổi
 
-## Type of Change
-- [ ] Bug fix
-- [ ] New feature
+## Loại Thay Đổi
+- [ ] Sửa bug
+- [ ] Tính năng mới
 - [ ] Breaking change
-- [ ] Documentation update
+- [ ] Cập nhật tài liệu
 
-## Related Issues
+## Issues Liên Quan
 Closes #123
 
 ## Testing
-- [ ] Unit tests added/updated
-- [ ] Manual testing completed
-- [ ] All tests passing
+- [ ] Unit tests đã thêm/cập nhật
+- [ ] Manual testing hoàn thành
+- [ ] Tất cả tests pass
 
-## Screenshots (if applicable)
-[Add screenshots here]
+## Screenshots (nếu có)
+[Thêm screenshots ở đây]
 
 ## Checklist
-- [ ] Code follows style guidelines
-- [ ] Self-review completed
-- [ ] Comments added to complex code
-- [ ] Documentation updated
-- [ ] No new warnings generated
+- [ ] Code tuân theo style guidelines
+- [ ] Đã tự review
+- [ ] Đã thêm comments cho code phức tạp
+- [ ] Tài liệu đã cập nhật
+- [ ] Không có warnings mới
 - [ ] Tests pass locally
 ```
 
-### Review Process
+### Quy Trình Review
 
-1. Create PR with detailed description
-2. Assign reviewers (if applicable)
-3. Address review comments
-4. Update PR based on feedback
-5. Wait for approval
-6. Squash and merge (or rebase)
+1. Tạo PR với mô tả chi tiết
+2. Assign reviewers (nếu có)
+3. Xử lý review comments
+4. Cập nhật PR dựa trên feedback
+5. Chờ approval
+6. Squash and merge (hoặc rebase)
 
-### After Merge
+### Sau Merge
 
-- Delete your feature branch
-- Update local main branch
-- Close related issues
+- Xóa feature branch của bạn
+- Cập nhật local main branch
+- Đóng issues liên quan
 
 ---
 
-## Documentation
+## Tài Liệu
 
 ### Code Documentation
 
 **Python**:
 ```python
 def calculate_kpi_progress(kpi: KPI) -> float:
-    """Calculate KPI progress percentage.
+    """Tính phần trăm tiến độ KPI.
 
-    This function calculates the progress based on current_value
-    and target_value fields of the KPI model.
+    Function này tính tiến độ dựa trên current_value
+    và target_value của KPI model.
 
     Args:
         kpi: KPI model instance
 
     Returns:
-        float: Progress percentage (0-100)
+        float: Phần trăm tiến độ (0-100)
 
     Raises:
-        ValueError: If target_value is invalid
+        ValueError: Nếu target_value không hợp lệ
 
     Example:
         >>> kpi = KPI(current_value=90, target_value=100)
@@ -423,81 +423,81 @@ def calculate_kpi_progress(kpi: KPI) -> float:
 **JavaScript**:
 ```javascript
 /**
- * Calculate KPI progress percentage
- * @param {number} current - Current value
- * @param {number} target - Target value
- * @returns {number} Progress percentage (0-100)
+ * Tính phần trăm tiến độ KPI
+ * @param {number} current - Giá trị hiện tại
+ * @param {number} target - Giá trị mục tiêu
+ * @returns {number} Phần trăm tiến độ (0-100)
  */
 const calculateProgress = (current, target) => {
   // Implementation
 };
 ```
 
-### Updating Documentation
+### Cập Nhật Tài Liệu
 
-When making changes, update:
-- API documentation (if API changes)
-- README.md (if user-facing changes)
+Khi thực hiện thay đổi, cập nhật:
+- API documentation (nếu có thay đổi API)
+- README.md (nếu có thay đổi user-facing)
 - Code comments
 - Inline documentation
 
 ---
 
-## Reporting Issues
+## Báo Cáo Issues
 
-### Bug Reports
+### Báo Cáo Bug
 
-Use this template:
+Dùng template này:
 
 ```markdown
-**Bug Description**
-Clear description of the bug
+**Mô Tả Bug**
+Mô tả rõ ràng về bug
 
-**To Reproduce**
-Steps to reproduce:
-1. Go to '...'
-2. Click on '...'
-3. See error
+**Các Bước Tái Hiện**
+Các bước để tái hiện:
+1. Đi tới '...'
+2. Click vào '...'
+3. Thấy lỗi
 
-**Expected Behavior**
-What you expected to happen
+**Hành Vi Mong Đợi**
+Bạn mong đợi điều gì xảy ra
 
 **Screenshots**
-Add screenshots if applicable
+Thêm screenshots nếu có
 
-**Environment**
-- OS: [e.g., Ubuntu 22.04]
-- Browser: [e.g., Chrome 120]
-- Version: [e.g., 1.0.0]
+**Môi Trường**
+- OS: [vd. Ubuntu 22.04]
+- Browser: [vd. Chrome 120]
+- Version: [vd. 1.0.0]
 
-**Additional Context**
-Any other relevant information
+**Thông Tin Bổ Sung**
+Bất kỳ thông tin liên quan nào khác
 ```
 
-### Feature Requests
+### Yêu Cầu Tính Năng
 
 ```markdown
-**Feature Description**
-Clear description of the feature
+**Mô Tả Tính Năng**
+Mô tả rõ ràng về tính năng
 
-**Problem It Solves**
-What problem does this address?
+**Vấn Đề Nó Giải Quyết**
+Tính năng này giải quyết vấn đề gì?
 
-**Proposed Solution**
-How would you implement this?
+**Giải Pháp Đề Xuất**
+Bạn sẽ implement nó như thế nào?
 
-**Alternatives Considered**
-Other approaches you've considered
+**Các Phương Án Khác**
+Các cách tiếp cận khác bạn đã cân nhắc
 
-**Additional Context**
-Mockups, examples, etc.
+**Thông Tin Bổ Sung**
+Mockups, ví dụ, v.v.
 ```
 
 ---
 
-## Project Structure
+## Cấu Trúc Dự Án
 
-Familiarize yourself with the structure:
+Làm quen với cấu trúc:
 
 ```
 kpi-system/
@@ -516,52 +516,52 @@ kpi-system/
 │   │   ├── services/
 │   │   └── contexts/
 │   └── public/
-├── docs/             # Documentation
-├── data/             # Persistent data (not in Git)
+├── docs/             # Tài liệu
+├── data/             # Dữ liệu lưu trữ (không trong Git)
 └── docker-compose.yml
 ```
 
 ---
 
-## Development Best Practices
+## Best Practices Phát Triển
 
-### Security
-- Never commit `.env` files
-- Don't hardcode secrets
-- Validate all user inputs
-- Use parameterized queries
-- Follow OWASP guidelines
+### Bảo Mật
+- Không bao giờ commit files `.env`
+- Không hardcode secrets
+- Validate tất cả user inputs
+- Dùng parameterized queries
+- Tuân theo hướng dẫn OWASP
 
-### Performance
-- Avoid N+1 queries
-- Use pagination for lists
-- Optimize images
+### Hiệu Năng
+- Tránh N+1 queries
+- Dùng pagination cho lists
+- Tối ưu hóa images
 - Lazy load components
-- Cache when appropriate
+- Cache khi phù hợp
 
 ### Accessibility
-- Use semantic HTML
-- Add ARIA labels
-- Support keyboard navigation
-- Test with screen readers
-- Maintain color contrast
+- Dùng semantic HTML
+- Thêm ARIA labels
+- Hỗ trợ keyboard navigation
+- Test với screen readers
+- Duy trì color contrast
 
 ---
 
-## Questions?
+## Câu Hỏi?
 
-- Check [documentation](./docs/)
-- Ask in project discussions
-- Contact maintainers: support@company.com
+- Kiểm tra [tài liệu](./docs/)
+- Hỏi trong project discussions
+- Liên hệ maintainers: support@company.com
 
 ---
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the same license as the project.
+Bằng việc đóng góp, bạn đồng ý rằng contributions của bạn sẽ được licensed theo cùng license với dự án.
 
 ---
 
-**Thank you for contributing!** 🎉
+**Cảm ơn bạn đã đóng góp!** 🎉
 
-Your contributions make this project better for everyone.
+Contributions của bạn làm dự án này tốt hơn cho mọi người.
