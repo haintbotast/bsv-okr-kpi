@@ -1,128 +1,129 @@
-# Documentation Index - KPI Management System
+# Mục Lục Tài Liệu - Hệ Thống Quản Lý KPI
 
-Welcome to the KPI Management System documentation!
-
----
-
-## 📚 Documentation Structure
-
-### Getting Started
-- [Main README](../README.md) - Project overview and quick start
-- [Quick Start Guide](../QUICK_START_GUIDE.md) - Step-by-step workflow with Claude Code
-- [Environment Setup](./.env.example) - Environment variables configuration
-
-### Architecture & Design
-1. [**01_OVERVIEW.md**](./01_OVERVIEW.md) - Project overview, goals, and business requirements
-2. [**02_ARCHITECTURE.md**](./02_ARCHITECTURE.md) - System architecture and technical decisions *(Coming soon)*
-3. [**03_DATABASE_SCHEMA.md**](./03_DATABASE_SCHEMA.md) - Complete database schema *(Coming soon)*
-4. [**04_FEATURES_PHASES.md**](./04_FEATURES_PHASES.md) - Features organized by 7 development phases *(Coming soon)*
-
-### Security & Quality
-5. [**05_SECURITY.md**](./05_SECURITY.md) - Security best practices and guidelines *(Coming soon)*
-6. [**06_TESTING.md**](./06_TESTING.md) - Testing strategy and procedures *(Coming soon)*
-
-### Operations
-7. [**07_DEPLOYMENT.md**](./07_DEPLOYMENT.md) - Deployment guide and procedures *(Coming soon)*
-8. [**08_MAINTENANCE.md**](./08_MAINTENANCE.md) - Maintenance and troubleshooting *(Coming soon)*
-
-### API Reference
-9. [**API_SPECIFICATION.md**](./API_SPECIFICATION.md) - Complete REST API documentation
+Chào mừng đến với tài liệu Hệ Thống Quản Lý KPI!
 
 ---
 
-## 🚀 Quick Navigation
+## 📚 Cấu Trúc Tài Liệu
 
-**I'm a developer starting fresh:**
-→ Start with [Quick Start Guide](../QUICK_START_GUIDE.md)
+### Bắt Đầu
+- [README chính](../README.md) - Tổng quan dự án và hướng dẫn nhanh
+- [Hướng Dẫn Nhanh](../QUICK_START_GUIDE.md) - Workflow từng bước với Claude Code
+- [Cấu hình môi trường](../.env.example) - Template biến môi trường
 
-**I want to understand the system:**
-→ Read [01_OVERVIEW.md](./01_OVERVIEW.md)
+### Kiến Trúc & Thiết Kế
+1. [**01_OVERVIEW.md**](./01_OVERVIEW.md) - Tổng quan dự án, mục tiêu và yêu cầu nghiệp vụ
+2. [**02_KIEN_TRUC.md**](./02_KIEN_TRUC.md) - Kiến trúc hệ thống và các quyết định kỹ thuật
+3. [**03_DATABASE_SCHEMA.md**](./03_DATABASE_SCHEMA.md) - Schema cơ sở dữ liệu đầy đủ
+4. [**04_FEATURES_PHASES.md**](./04_FEATURES_PHASES.md) - Tính năng theo 7 giai đoạn phát triển
 
-**I'm implementing features:**
-→ Check [04_FEATURES_PHASES.md](./04_FEATURES_PHASES.md) and [API_SPECIFICATION.md](./API_SPECIFICATION.md)
+### Bảo Mật & Chất Lượng
+5. [**05_BAO_MAT.md**](./05_BAO_MAT.md) - Best practices và hướng dẫn bảo mật
+6. [**06_TESTING.md**](./06_TESTING.md) - Chiến lược testing và quy trình
 
-**I'm deploying to production:**
-→ Follow [07_DEPLOYMENT.md](./07_DEPLOYMENT.md)
+### Vận Hành
+7. [**07_DEPLOYMENT.md**](./07_DEPLOYMENT.md) - Hướng dẫn deployment và triển khai
+8. [**08_BAO_TRI.md**](./08_BAO_TRI.md) - Bảo trì và xử lý sự cố
 
-**I need to troubleshoot:**
-→ See [08_MAINTENANCE.md](./08_MAINTENANCE.md)
-
----
-
-## 📦 Additional Resources
-
-### Configuration Files
-- [docker-compose.yml](../docker-compose.yml) - Development Docker configuration
-- [docker-compose.prod.yml](../docker-compose.prod.yml) - Production Docker configuration
-- [.env.example](../.env.example) - Environment variables template
-- [.gitignore](../.gitignore) - Git ignore rules
-
-### Contributing
-- [CONTRIBUTING.md](../CONTRIBUTING.md) - How to contribute to this project
-- [CHANGELOG.md](../CHANGELOG.md) - Version history and changes
+### Tài Liệu API
+9. [**API_SPECIFICATION.md**](./API_SPECIFICATION.md) - Tài liệu REST API đầy đủ
 
 ---
 
-## 🔍 What's What?
+## 🚀 Điều Hướng Nhanh
 
-| Document | Purpose | Audience |
-|----------|---------|----------|
-| README.md | Quick start and overview | Everyone |
-| QUICK_START_GUIDE.md | How to use Claude Code | Developers |
-| 01_OVERVIEW.md | Business and technical overview | Product owners, Developers |
-| 02_ARCHITECTURE.md | Technical architecture | Developers, DevOps |
-| 03_DATABASE_SCHEMA.md | Database design | Backend developers |
-| 04_FEATURES_PHASES.md | Development roadmap | Developers, Project managers |
-| 05_SECURITY.md | Security guidelines | Developers, Security team |
-| 06_TESTING.md | Testing procedures | QA, Developers |
-| 07_DEPLOYMENT.md | How to deploy | DevOps, System admins |
-| 08_MAINTENANCE.md | Troubleshooting & maintenance | Support team, DevOps |
-| API_SPECIFICATION.md | API reference | Frontend & Backend developers |
+**Tôi là developer mới bắt đầu:**
+→ Bắt đầu với [Hướng Dẫn Nhanh](../QUICK_START_GUIDE.md)
 
----
+**Tôi muốn hiểu hệ thống:**
+→ Đọc [01_OVERVIEW.md](./01_OVERVIEW.md)
 
-## 💡 Tips
+**Tôi đang implement tính năng:**
+→ Xem [04_FEATURES_PHASES.md](./04_FEATURES_PHASES.md) và [API_SPECIFICATION.md](./API_SPECIFICATION.md)
 
-- Start with `01_OVERVIEW.md` to understand the big picture
-- Use `API_SPECIFICATION.md` as your primary reference during development
-- Keep `QUICK_START_GUIDE.md` handy for Claude Code workflows
-- Refer to the original `CLAUDE_CODE_PROMPT_KPI_System.txt` for complete specifications
+**Tôi đang deploy production:**
+→ Làm theo [07_DEPLOYMENT.md](./07_DEPLOYMENT.md)
+
+**Tôi cần troubleshoot:**
+→ Xem [08_BAO_TRI.md](./08_BAO_TRI.md)
 
 ---
 
-## 🆘 Need Help?
+## 📦 Tài Nguyên Bổ Sung
 
-1. Check the relevant documentation section above
-2. Review [Troubleshooting](./08_MAINTENANCE.md#troubleshooting)
-3. Search the [Main README](../README.md) FAQ section
-4. Contact: support@company.com
+### Files Cấu Hình
+- [docker-compose.yml](../docker-compose.yml) - Cấu hình Docker cho development
+- [docker-compose.prod.yml](../docker-compose.prod.yml) - Cấu hình Docker cho production
+- [.env.example](../.env.example) - Template biến môi trường
+- [.gitignore](../.gitignore) - Quy tắc Git ignore
+- [nginx.prod.conf](../nginx.prod.conf) - Cấu hình Nginx production
+
+### Đóng Góp
+- [CONTRIBUTING.md](../CONTRIBUTING.md) - Hướng dẫn đóng góp cho dự án
+- [CHANGELOG.md](../CHANGELOG.md) - Lịch sử phiên bản
 
 ---
 
-## 📝 Documentation Status
+## 🔍 Tài Liệu Là Gì?
 
-✅ = Complete | 🚧 = In Progress | ⏳ = Planned
+| Tài liệu | Mục đích | Đối tượng |
+|----------|----------|-----------|
+| README.md | Hướng dẫn nhanh và tổng quan | Tất cả mọi người |
+| QUICK_START_GUIDE.md | Cách dùng Claude Code | Developers |
+| 01_OVERVIEW.md | Tổng quan nghiệp vụ và kỹ thuật | Product owners, Developers |
+| 02_KIEN_TRUC.md | Kiến trúc kỹ thuật | Developers, DevOps |
+| 03_DATABASE_SCHEMA.md | Thiết kế database | Backend developers |
+| 04_FEATURES_PHASES.md | Lộ trình phát triển | Developers, Project managers |
+| 05_BAO_MAT.md | Hướng dẫn bảo mật | Developers, Security team |
+| 06_TESTING.md | Quy trình testing | QA, Developers |
+| 07_DEPLOYMENT.md | Cách triển khai | DevOps, System admins |
+| 08_BAO_TRI.md | Troubleshooting & bảo trì | Support team, DevOps |
+| API_SPECIFICATION.md | Tài liệu API | Frontend & Backend developers |
 
-| Document | Status |
-|----------|--------|
-| README.md (Main) | ✅ |
+---
+
+## 💡 Mẹo
+
+- Bắt đầu với `01_OVERVIEW.md` để hiểu tổng thể
+- Dùng `API_SPECIFICATION.md` làm tài liệu tham khảo chính khi phát triển
+- Giữ `QUICK_START_GUIDE.md` bên tay cho Claude Code workflows
+- Tham khảo file gốc `CLAUDE_CODE_PROMPT_KPI_System.txt` để xem specification đầy đủ
+
+---
+
+## 🆘 Cần Giúp Đỡ?
+
+1. Kiểm tra phần tài liệu liên quan ở trên
+2. Xem [Troubleshooting](./08_BAO_TRI.md#common-issues--solutions)
+3. Tìm trong [README chính](../README.md) phần FAQ
+4. Liên hệ: support@company.com
+
+---
+
+## 📝 Trạng Thái Tài Liệu
+
+✅ = Hoàn thành | 🚧 = Đang làm | ⏳ = Dự kiến
+
+| Tài liệu | Trạng thái |
+|----------|-----------|
+| README.md (Chính) | ✅ |
 | QUICK_START_GUIDE.md | ✅ |
 | 01_OVERVIEW.md | ✅ |
-| 02_ARCHITECTURE.md | ⏳ |
-| 03_DATABASE_SCHEMA.md | ⏳ |
-| 04_FEATURES_PHASES.md | ⏳ |
-| 05_SECURITY.md | ⏳ |
-| 06_TESTING.md | ⏳ |
-| 07_DEPLOYMENT.md | ⏳ |
-| 08_MAINTENANCE.md | ⏳ |
+| 02_KIEN_TRUC.md | ✅ |
+| 03_DATABASE_SCHEMA.md | ✅ |
+| 04_FEATURES_PHASES.md | ✅ |
+| 05_BAO_MAT.md | ✅ |
+| 06_TESTING.md | ✅ |
+| 07_DEPLOYMENT.md | ✅ |
+| 08_BAO_TRI.md | ✅ |
 | API_SPECIFICATION.md | ✅ |
-| CONTRIBUTING.md | ⏳ |
-| CHANGELOG.md | ⏳ |
+| CONTRIBUTING.md | ✅ |
+| CHANGELOG.md | ✅ |
 
 ---
 
-**Note:** The original `CLAUDE_CODE_PROMPT_KPI_System.txt` contains the complete specification. These documentation files are organized versions for easier navigation and reference.
+**Lưu ý:** File gốc `CLAUDE_CODE_PROMPT_KPI_System.txt` chứa specification đầy đủ. Các file tài liệu này là phiên bản được tổ chức để dễ điều hướng và tham khảo.
 
 ---
 
-**Happy coding!** 🎉
+**Chúc bạn code vui vẻ!** 🎉
