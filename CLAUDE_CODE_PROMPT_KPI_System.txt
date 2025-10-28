@@ -1,0 +1,1236 @@
+================================================================================
+CLAUDE CODE PROMPT: LIGHTWEIGHT KPI MANAGEMENT SYSTEM
+================================================================================
+Version: 1.0
+Target Scale: ~30 users
+Tech Stack: FastAPI + React + SQLite3 + Docker
+Deployment: Single server, self-hosted
+
+================================================================================
+PROJECT OVERVIEW
+================================================================================
+
+Build a complete, production-ready KPI (Key Performance Indicator) Management 
+System optimized for small teams (~30 users). The system must be:
+
+✓ Self-contained (SQLite database, local file storage)
+✓ Easy to deploy (Docker Compose, 2 containers only)
+✓ Cost-effective (no external services required)
+✓ Secure (JWT auth, bcrypt passwords, RBAC)
+✓ User-friendly (modern UI, responsive design)
+✓ Maintainable (clean code, documented, tested)
+
+TARGET USERS:
+- IT Department (5-10 users)
+- Management Team (3-5 users)
+- Department Staff (15-20 users)
+
+BUSINESS REQUIREMENTS:
+1. Manage KPIs by quarters (Q1-Q4) per year
+2. Track progress with evidence uploads
+3. Support approval workflow
+4. Generate reports (PDF export)
+5. Role-based access control
+6. Comment and collaboration features
+
+================================================================================
+ARCHITECTURE DECISIONS (FOR SMALL SCALE)
+================================================================================
+
+DATABASE:
+✓ SQLite3 (NOT PostgreSQL/MySQL)
+  - Single file database
+  - No separate DB server needed
+  - Perfect for <100 users
+  - ACID compliant
+  - File: /data/database/kpi.db
+
+FILE STORAGE:
+✓ Local filesystem (NOT S3/MinIO)
+  - Direct disk storage
+  - Nginx serves static files
+  - Path: /data/uploads/
+  - Max file size: 50MB per file
+
+BACKGROUND JOBS:
+✓ APScheduler (NOT Celery/Redis Queue)
+  - In-process scheduler
+  - No message broker needed
+  - Use for: reminders, cleanup, backups
+
+AUTHENTICATION:
+✓ JWT tokens (access + refresh)
+✓ bcrypt for password hashing
+✓ Session timeout: 8 hours
+
+DEPLOYMENT:
+✓ Docker Compose (2 containers)
+  - Backend: FastAPI + Uvicorn
+  - Frontend: React + Nginx
+✓ Single server deployment
+✓ Reverse proxy: Nginx
+✓ SSL: Let's Encrypt (manual setup)
+
+================================================================================
+TECHNICAL STACK
+================================================================================
+
+BACKEND:
+- Language: Python 3.11+
+- Framework: FastAPI 0.108+
+- ORM: SQLAlchemy 2.0+
+- Database: SQLite3
+- Migration: Alembic
+- Auth: python-jose, passlib
+- Scheduler: APScheduler 3.10+
+- File handling: python-multipart
+- PDF generation: reportlab
+- Excel export: openpyxl
+- Word generation: python-docx
+
+FRONTEND:
+- Framework: React 18+
+- Build tool: Vite 5+
+- Language: JavaScript (or TypeScript if preferred)
+- Styling: Tailwind CSS 3+
+- UI Components: shadcn/ui (optional)
+- State Management: React Context + hooks
+- HTTP Client: Axios
+- Routing: React Router v6
+- Forms: React Hook Form
+- Charts: Recharts or Chart.js
+- Date handling: date-fns
+- File preview: react-pdf, react-file-viewer
+
+DEPLOYMENT:
+- Containerization: Docker + Docker Compose
+- Web Server: Nginx
+- Process Manager: Uvicorn (for FastAPI)
+- Reverse Proxy: Nginx (for routing)
+
+================================================================================
+DATABASE SCHEMA (SQLite)
+================================================================================
+
+TABLES TO IMPLEMENT:
+
+1. users
+   - id: INTEGER PRIMARY KEY AUTOINCREMENT
+   - email: TEXT UNIQUE NOT NULL
+   - username: TEXT UNIQUE NOT NULL
+   - password_hash: TEXT NOT NULL
+   - full_name: TEXT
+   - role: TEXT NOT NULL (admin, manager, employee)
+   - department: TEXT
+   - position: TEXT
+   - is_active: BOOLEAN DEFAULT TRUE
+   - created_at: TIMESTAMP
+   - updated_at: TIMESTAMP
+
+2. kpi_templates
+   - id: INTEGER PRIMARY KEY
+   - name: TEXT NOT NULL
+   - description: TEXT
+   - category: TEXT (mission, goal, task)
+   - role: TEXT (admin, manager, employee)
+   - measurement_method: TEXT
+   - target_type: TEXT (percentage, number, boolean)
+   - created_by: INTEGER FOREIGN KEY -> users.id
+   - created_at: TIMESTAMP
+   - is_active: BOOLEAN
+
+3. kpis
+   - id: INTEGER PRIMARY KEY
+   - user_id: INTEGER FOREIGN KEY -> users.id
+   - template_id: INTEGER FOREIGN KEY -> kpi_templates.id (nullable)
+   - year: INTEGER NOT NULL
+   - quarter: TEXT NOT NULL (Q1, Q2, Q3, Q4)
+   - title: TEXT NOT NULL
+   - description: TEXT
+   - category: TEXT
+   - target_value: TEXT
+   - current_value: TEXT
+   - progress_percentage: REAL
+   - measurement_method: TEXT
+   - status: TEXT (draft, submitted, approved, rejected)
+   - created_at: TIMESTAMP
+   - updated_at: TIMESTAMP
+   - submitted_at: TIMESTAMP
+   - approved_at: TIMESTAMP
+   - approved_by: INTEGER FOREIGN KEY -> users.id
+
+4. kpi_evidence
+   - id: INTEGER PRIMARY KEY
+   - kpi_id: INTEGER FOREIGN KEY -> kpis.id
+   - file_name: TEXT NOT NULL
+   - file_path: TEXT NOT NULL
+   - file_type: TEXT
+   - file_size: INTEGER
+   - uploaded_by: INTEGER FOREIGN KEY -> users.id
+   - uploaded_at: TIMESTAMP
+   - description: TEXT
+
+5. kpi_comments
+   - id: INTEGER PRIMARY KEY
+   - kpi_id: INTEGER FOREIGN KEY -> kpis.id
+   - user_id: INTEGER FOREIGN KEY -> users.id
+   - comment: TEXT NOT NULL
+   - created_at: TIMESTAMP
+   - updated_at: TIMESTAMP
+
+6. kpi_history
+   - id: INTEGER PRIMARY KEY
+   - kpi_id: INTEGER FOREIGN KEY -> kpis.id
+   - user_id: INTEGER FOREIGN KEY -> users.id
+   - action: TEXT (created, updated, submitted, approved, rejected)
+   - old_value: TEXT (JSON)
+   - new_value: TEXT (JSON)
+   - created_at: TIMESTAMP
+
+7. notifications
+   - id: INTEGER PRIMARY KEY
+   - user_id: INTEGER FOREIGN KEY -> users.id
+   - title: TEXT
+   - message: TEXT
+   - type: TEXT (info, warning, success, error)
+   - is_read: BOOLEAN DEFAULT FALSE
+   - link: TEXT
+   - created_at: TIMESTAMP
+
+8. system_settings
+   - key: TEXT PRIMARY KEY
+   - value: TEXT
+   - description: TEXT
+   - updated_at: TIMESTAMP
+
+================================================================================
+FEATURES TO IMPLEMENT
+================================================================================
+
+PHASE 1: CORE INFRASTRUCTURE (Week 1)
+--------------------------------------
+Backend:
+□ Project setup with FastAPI
+□ SQLite database configuration
+□ SQLAlchemy models for all tables
+□ Alembic migrations setup
+□ Database initialization script
+□ JWT authentication system
+  - Login endpoint
+  - Token refresh endpoint
+  - Password reset (email optional)
+□ User CRUD operations
+□ Role-based access control (RBAC)
+□ Error handling middleware
+□ CORS configuration
+□ Logging setup
+
+Frontend:
+□ React project setup with Vite
+□ Tailwind CSS configuration
+□ Folder structure
+  - /src/components (reusable components)
+  - /src/pages (route pages)
+  - /src/services (API calls)
+  - /src/utils (helpers)
+  - /src/contexts (global state)
+□ Authentication context
+□ Login page
+□ Protected routes
+□ Layout components (Header, Sidebar, Footer)
+□ Basic styling and theme
+
+Docker:
+□ Backend Dockerfile
+□ Frontend Dockerfile (multi-stage)
+□ Docker Compose file
+□ Nginx configuration
+□ Environment variables setup
+□ Volume mounts for data persistence
+
+PHASE 2: KPI MANAGEMENT (Week 2)
+---------------------------------
+Backend:
+□ KPI templates CRUD
+□ KPI CRUD endpoints
+□ KPI filtering (by user, year, quarter, status)
+□ KPI statistics endpoint
+□ Validation logic
+  - Business rules enforcement
+  - Data integrity checks
+□ Search functionality
+
+Frontend:
+□ Dashboard page
+  - Overview statistics
+  - Recent KPIs
+  - Pending approvals (for managers)
+  - Charts (progress by quarter)
+□ KPI list page
+  - Filters (year, quarter, status, user)
+  - Search
+  - Pagination
+  - Sort options
+□ KPI create/edit form
+  - Template selection
+  - Dynamic form fields
+  - Validation
+  - Auto-save (optional)
+□ KPI detail view
+  - Full information display
+  - Timeline/history
+  - Related evidence
+  - Comments section
+
+PHASE 3: FILE MANAGEMENT (Week 3)
+----------------------------------
+Backend:
+□ File upload endpoint
+  - Validate file types (pdf, doc, docx, xls, xlsx, jpg, png)
+  - Validate file size (max 50MB)
+  - Generate unique filenames
+  - Store in /data/uploads/
+□ File download endpoint
+□ File delete endpoint
+□ File listing by KPI
+□ Security checks (ownership validation)
+
+Frontend:
+□ File upload component
+  - Drag & drop support
+  - Multiple file upload
+  - Progress indicator
+  - Preview before upload
+□ File list component
+  - Thumbnail view
+  - Download button
+  - Delete button (with confirmation)
+□ File viewer component
+  - PDF preview (react-pdf)
+  - Image preview
+  - Document preview (iframe for Office files)
+
+PHASE 4: WORKFLOW & COLLABORATION (Week 4)
+-------------------------------------------
+Backend:
+□ Comment CRUD endpoints
+□ Comment notifications
+□ KPI approval workflow
+  - Submit for approval
+  - Approve endpoint
+  - Reject endpoint (with reason)
+□ Email notifications (optional)
+  - SMTP configuration
+  - Template system
+  - Send on: submission, approval, rejection
+□ Activity history tracking
+□ Notification system
+  - Create notification
+  - Mark as read
+  - List notifications
+
+Frontend:
+□ Comment section component
+  - Add comment form
+  - Comment list
+  - Real-time updates (polling every 30s)
+□ Approval interface (for managers)
+  - Pending list
+  - Approve/reject buttons
+  - Reason input for rejection
+□ Notification center
+  - Dropdown in header
+  - Unread count badge
+  - Mark all as read
+  - Link to related KPI
+□ Activity timeline
+  - Show KPI history
+  - Visual timeline UI
+
+PHASE 5: REPORTING & ANALYTICS (Week 5)
+----------------------------------------
+Backend:
+□ Report generation endpoints
+  - User report (all KPIs for user)
+  - Department report
+  - Quarterly report
+  - Annual report
+□ PDF export (reportlab)
+  - Header with logo
+  - KPI details table
+  - Charts (if possible)
+  - Evidence list
+□ Excel export (openpyxl)
+  - Multiple sheets
+  - Formatted cells
+  - Charts
+□ Analytics endpoints
+  - KPI completion rate
+  - Average progress
+  - Department comparison
+  - Quarter-over-quarter growth
+
+Frontend:
+□ Reports page
+  - Report type selection
+  - Filter options
+  - Generate button
+  - Download link
+□ Analytics dashboard
+  - Summary cards
+  - Charts (bar, line, pie)
+  - Filters (year, quarter, department)
+  - Export to Excel
+□ Print-friendly views
+  - CSS for printing
+  - Remove navigation
+  - Optimize layout
+
+PHASE 6: ADMIN FEATURES (Week 6)
+---------------------------------
+Backend:
+□ User management endpoints
+  - List all users
+  - Create user
+  - Update user
+  - Deactivate user
+  - Reset password
+□ Template management
+  - CRUD for templates
+  - Assign templates to roles
+□ System settings
+  - Get/update settings
+  - Configuration options
+□ Backup endpoint
+  - Manual backup trigger
+  - List backups
+  - Restore backup
+□ Audit log
+  - Track all actions
+  - Filter by user, date, action
+
+Frontend:
+□ User management page
+  - User list table
+  - Add/edit user form
+  - Bulk actions
+  - Role assignment
+□ Template management page
+  - Template list
+  - Template editor
+  - Preview
+□ System settings page
+  - Configuration forms
+  - Save settings
+□ Backup management
+  - Backup list
+  - Download backup
+  - Restore interface
+□ Audit log viewer
+  - Table with filters
+  - Search
+  - Export to CSV
+
+PHASE 7: OPTIMIZATION & POLISH (Week 7-8)
+------------------------------------------
+Backend:
+□ Query optimization
+  - Add indexes
+  - Optimize N+1 queries
+  - Pagination improvements
+□ Caching (if needed)
+  - Cache frequently accessed data
+□ Background tasks with APScheduler
+  - Daily backup at 2 AM
+  - Cleanup old notifications
+  - Send reminder emails
+□ API documentation (Swagger UI)
+□ Unit tests (pytest)
+  - Test auth
+  - Test CRUD operations
+  - Test business logic
+□ Load testing (basic)
+  - Test with 30 concurrent users
+
+Frontend:
+□ Performance optimization
+  - Code splitting
+  - Lazy loading
+  - Image optimization
+□ Responsive design
+  - Mobile-friendly
+  - Tablet support
+□ Accessibility (WCAG 2.1)
+  - Keyboard navigation
+  - Screen reader support
+  - ARIA labels
+□ Error boundaries
+□ Loading states
+□ Empty states
+□ Success/error messages (toast notifications)
+□ User guide/documentation
+  - Help tooltips
+  - Getting started guide
+  - FAQ page
+
+Testing:
+□ End-to-end tests (Playwright or Cypress)
+  - Login flow
+  - Create KPI flow
+  - Approval flow
+  - File upload flow
+□ Browser compatibility testing
+□ User acceptance testing
+
+================================================================================
+PROJECT STRUCTURE
+================================================================================
+
+kpi-system/
+│
+├── backend/
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   ├── alembic.ini
+│   ├── pytest.ini
+│   │
+│   ├── alembic/
+│   │   ├── env.py
+│   │   └── versions/
+│   │       └── (migration files)
+│   │
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── main.py                    # FastAPI app initialization
+│   │   ├── config.py                  # Configuration settings
+│   │   ├── database.py                # Database connection
+│   │   │
+│   │   ├── models/                    # SQLAlchemy models
+│   │   │   ├── __init__.py
+│   │   │   ├── user.py
+│   │   │   ├── kpi.py
+│   │   │   ├── template.py
+│   │   │   ├── evidence.py
+│   │   │   ├── comment.py
+│   │   │   └── notification.py
+│   │   │
+│   │   ├── schemas/                   # Pydantic schemas
+│   │   │   ├── __init__.py
+│   │   │   ├── user.py
+│   │   │   ├── kpi.py
+│   │   │   ├── auth.py
+│   │   │   └── ...
+│   │   │
+│   │   ├── api/                       # API routes
+│   │   │   ├── __init__.py
+│   │   │   ├── deps.py                # Dependencies (auth, db)
+│   │   │   └── v1/
+│   │   │       ├── __init__.py
+│   │   │       ├── auth.py
+│   │   │       ├── users.py
+│   │   │       ├── kpis.py
+│   │   │       ├── templates.py
+│   │   │       ├── files.py
+│   │   │       ├── comments.py
+│   │   │       ├── reports.py
+│   │   │       └── admin.py
+│   │   │
+│   │   ├── crud/                      # CRUD operations
+│   │   │   ├── __init__.py
+│   │   │   ├── user.py
+│   │   │   ├── kpi.py
+│   │   │   └── ...
+│   │   │
+│   │   ├── services/                  # Business logic
+│   │   │   ├── __init__.py
+│   │   │   ├── auth.py
+│   │   │   ├── file_service.py
+│   │   │   ├── report_service.py
+│   │   │   ├── notification_service.py
+│   │   │   └── scheduler.py
+│   │   │
+│   │   └── utils/                     # Utilities
+│   │       ├── __init__.py
+│   │       ├── security.py
+│   │       ├── email.py
+│   │       └── helpers.py
+│   │
+│   └── tests/
+│       ├── __init__.py
+│       ├── conftest.py
+│       ├── test_auth.py
+│       └── test_kpis.py
+│
+├── frontend/
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   ├── index.html
+│   │
+│   ├── public/
+│   │   ├── logo.svg
+│   │   └── favicon.ico
+│   │
+│   └── src/
+│       ├── main.jsx                   # Entry point
+│       ├── App.jsx                    # Root component
+│       │
+│       ├── components/                # Reusable components
+│       │   ├── layout/
+│       │   │   ├── Header.jsx
+│       │   │   ├── Sidebar.jsx
+│       │   │   ├── Footer.jsx
+│       │   │   └── Layout.jsx
+│       │   ├── common/
+│       │   │   ├── Button.jsx
+│       │   │   ├── Input.jsx
+│       │   │   ├── Modal.jsx
+│       │   │   ├── Table.jsx
+│       │   │   ├── Loader.jsx
+│       │   │   └── Toast.jsx
+│       │   └── features/
+│       │       ├── KPICard.jsx
+│       │       ├── KPIForm.jsx
+│       │       ├── FileUpload.jsx
+│       │       ├── CommentSection.jsx
+│       │       ├── ApprovalButton.jsx
+│       │       └── Chart.jsx
+│       │
+│       ├── pages/                     # Route pages
+│       │   ├── auth/
+│       │   │   ├── Login.jsx
+│       │   │   └── ForgotPassword.jsx
+│       │   ├── Dashboard.jsx
+│       │   ├── KPIList.jsx
+│       │   ├── KPIDetail.jsx
+│       │   ├── KPICreate.jsx
+│       │   ├── Reports.jsx
+│       │   ├── Analytics.jsx
+│       │   ├── Profile.jsx
+│       │   └── admin/
+│       │       ├── Users.jsx
+│       │       ├── Templates.jsx
+│       │       └── Settings.jsx
+│       │
+│       ├── services/                  # API services
+│       │   ├── api.js                 # Axios config
+│       │   ├── authService.js
+│       │   ├── kpiService.js
+│       │   ├── fileService.js
+│       │   ├── commentService.js
+│       │   └── reportService.js
+│       │
+│       ├── contexts/                  # React contexts
+│       │   ├── AuthContext.jsx
+│       │   ├── NotificationContext.jsx
+│       │   └── ThemeContext.jsx
+│       │
+│       ├── hooks/                     # Custom hooks
+│       │   ├── useAuth.js
+│       │   ├── useKPI.js
+│       │   └── useDebounce.js
+│       │
+│       ├── utils/                     # Utilities
+│       │   ├── constants.js
+│       │   ├── helpers.js
+│       │   └── validators.js
+│       │
+│       └── styles/                    # Global styles
+│           └── index.css
+│
+├── data/                              # Persistent data (auto-created)
+│   ├── database/
+│   │   └── kpi.db
+│   ├── uploads/
+│   └── backups/
+│
+├── scripts/                           # Helper scripts
+│   ├── init_db.py                     # Initialize database
+│   ├── seed_data.py                   # Seed sample data
+│   ├── backup.sh                      # Manual backup
+│   └── deploy.sh                      # Deployment script
+│
+├── docker-compose.yml                 # Docker orchestration
+├── .env.example                       # Environment template
+├── .gitignore
+└── README.md                          # Documentation
+
+================================================================================
+DOCKER COMPOSE CONFIGURATION
+================================================================================
+
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: kpi-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data/database:/data/database
+      - ./data/uploads:/data/uploads
+      - ./data/backups:/data/backups
+    environment:
+      - DATABASE_URL=sqlite:////data/database/kpi.db
+      - SECRET_KEY=${SECRET_KEY}
+      - UPLOAD_DIR=/data/uploads
+      - BACKUP_DIR=/data/backups
+      - CORS_ORIGINS=${CORS_ORIGINS}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build: ./frontend
+    container_name: kpi-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    volumes:
+      - ./data/uploads:/data/uploads:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  database:
+  uploads:
+  backups:
+
+================================================================================
+ENVIRONMENT VARIABLES (.env)
+================================================================================
+
+# Application
+APP_NAME=KPI Management System
+APP_VERSION=1.0.0
+ENVIRONMENT=production
+
+# Security
+SECRET_KEY=your-super-secret-key-min-32-chars-change-in-production
+JWT_ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=480
+REFRESH_TOKEN_EXPIRE_DAYS=7
+
+# Database
+DATABASE_URL=sqlite:////data/database/kpi.db
+
+# File Storage
+UPLOAD_DIR=/data/uploads
+MAX_UPLOAD_SIZE=52428800
+ALLOWED_EXTENSIONS=pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png,gif
+
+# Backup
+BACKUP_DIR=/data/backups
+BACKUP_RETENTION_DAYS=30
+AUTO_BACKUP_ENABLED=true
+BACKUP_SCHEDULE=0 2 * * *
+
+# CORS
+CORS_ORIGINS=http://localhost,http://localhost:3000,http://your-domain.com
+
+# Email (Optional)
+SMTP_ENABLED=false
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
+SMTP_FROM=noreply@your-domain.com
+
+# Logging
+LOG_LEVEL=INFO
+LOG_FILE=/data/logs/app.log
+
+================================================================================
+KEY CONFIGURATION FILES
+================================================================================
+
+BACKEND REQUIREMENTS.TXT:
+```
+fastapi==0.108.0
+uvicorn[standard]==0.25.0
+sqlalchemy==2.0.25
+alembic==1.13.0
+pydantic==2.5.3
+pydantic-settings==2.1.0
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+python-dateutil==2.8.2
+apscheduler==3.10.4
+reportlab==4.0.7
+openpyxl==3.1.2
+python-docx==1.1.0
+pillow==10.1.0
+aiofiles==23.2.1
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.25.2
+```
+
+FRONTEND PACKAGE.JSON:
+```json
+{
+  "name": "kpi-frontend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.1",
+    "axios": "^1.6.2",
+    "react-hook-form": "^7.49.2",
+    "date-fns": "^3.0.0",
+    "recharts": "^2.10.3",
+    "react-pdf": "^7.6.0",
+    "lucide-react": "^0.294.0",
+    "clsx": "^2.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.0.8",
+    "tailwindcss": "^3.3.6",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "eslint": "^8.55.0"
+  }
+}
+```
+
+NGINX.CONF:
+```nginx
+server {
+    listen 80;
+    server_name localhost;
+    client_max_body_size 50M;
+
+    # Frontend
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Backend API
+    location /api {
+        proxy_pass http://backend:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # File uploads/downloads
+    location /uploads {
+        alias /data/uploads;
+        autoindex off;
+        
+        # Security headers
+        add_header X-Content-Type-Options nosniff;
+        add_header X-Frame-Options SAMEORIGIN;
+        add_header X-XSS-Protection "1; mode=block";
+    }
+
+    # Health check
+    location /health {
+        access_log off;
+        return 200 "healthy\n";
+        add_header Content-Type text/plain;
+    }
+}
+```
+
+================================================================================
+SECURITY BEST PRACTICES
+================================================================================
+
+1. AUTHENTICATION:
+   □ Use strong JWT secret (min 32 characters)
+   □ Implement token refresh mechanism
+   □ Set reasonable token expiry times
+   □ Store tokens in httpOnly cookies (if possible)
+   □ Implement password complexity requirements
+   □ Use bcrypt with cost factor 12+
+
+2. AUTHORIZATION:
+   □ Implement RBAC consistently
+   □ Validate user permissions on every endpoint
+   □ Use dependency injection for auth checks
+   □ Don't trust client-side role checks
+
+3. FILE UPLOADS:
+   □ Validate file types (whitelist approach)
+   □ Limit file sizes (50MB max)
+   □ Sanitize filenames
+   □ Store outside web root
+   □ Use unique filenames (UUID)
+   □ Scan for malware (optional)
+
+4. DATABASE:
+   □ Use parameterized queries (SQLAlchemy does this)
+   □ Implement proper indexing
+   □ Regular backups
+   □ Validate input data
+   □ Use foreign key constraints
+
+5. API SECURITY:
+   □ Enable CORS properly
+   □ Rate limiting (optional for 30 users)
+   □ Input validation with Pydantic
+   □ SQL injection prevention
+   □ XSS prevention
+   □ CSRF protection (if using cookies)
+
+6. DEPLOYMENT:
+   □ Use HTTPS (Let's Encrypt)
+   □ Keep containers updated
+   □ Don't expose database port
+   □ Use secrets management
+   □ Implement logging
+   □ Monitor for errors
+
+================================================================================
+TESTING STRATEGY
+================================================================================
+
+BACKEND TESTS:
+□ Unit tests for models
+□ Unit tests for CRUD operations
+□ Integration tests for API endpoints
+□ Authentication tests
+□ Authorization tests
+□ File upload tests
+□ Test coverage > 70%
+
+FRONTEND TESTS:
+□ Component unit tests (optional)
+□ Integration tests (optional)
+□ E2E tests for critical flows:
+  - User login
+  - Create KPI
+  - Submit for approval
+  - Approve/reject KPI
+  - Upload file
+  - Generate report
+
+MANUAL TESTING CHECKLIST:
+□ All CRUD operations work
+□ Authentication flow complete
+□ File upload/download works
+□ Approval workflow functions
+□ Reports generate correctly
+□ Responsive design on mobile
+□ Browser compatibility (Chrome, Firefox, Safari, Edge)
+□ Error handling works
+□ Loading states display
+□ Notifications appear
+
+================================================================================
+DEPLOYMENT CHECKLIST
+================================================================================
+
+PRE-DEPLOYMENT:
+□ Create .env file from .env.example
+□ Generate strong SECRET_KEY
+□ Configure CORS_ORIGINS
+□ Set up backup directory
+□ Review security settings
+□ Test locally with docker-compose
+
+INITIAL DEPLOYMENT:
+□ Clone repository to server
+□ Install Docker & Docker Compose
+□ Copy .env file
+□ Run: docker-compose up -d
+□ Initialize database: docker-compose exec backend python scripts/init_db.py
+□ Create admin user: docker-compose exec backend python scripts/create_admin.py
+□ Test access: http://your-server-ip
+□ Configure firewall (ports 80, 443)
+
+SSL CERTIFICATE (Let's Encrypt):
+□ Install certbot
+□ Run: certbot --nginx -d your-domain.com
+□ Update nginx.conf for HTTPS
+□ Test auto-renewal: certbot renew --dry-run
+
+POST-DEPLOYMENT:
+□ Login as admin
+□ Create user accounts
+□ Create KPI templates
+□ Import sample data (if needed)
+□ Configure backup schedule
+□ Set up monitoring (optional)
+□ Document custom configurations
+□ Train administrators
+
+================================================================================
+MAINTENANCE TASKS
+================================================================================
+
+DAILY:
+□ Check application logs
+□ Monitor disk space
+□ Verify backups completed
+
+WEEKLY:
+□ Review error logs
+□ Check user feedback
+□ Update documentation
+
+MONTHLY:
+□ Update dependencies (if security patches)
+□ Review and clean old backups
+□ Analyze usage statistics
+□ Performance review
+
+QUARTERLY:
+□ Full security audit
+□ Update documentation
+□ Plan new features
+□ User training sessions
+
+================================================================================
+PERFORMANCE OPTIMIZATION TIPS
+================================================================================
+
+BACKEND:
+1. Add database indexes on:
+   - users.email
+   - users.username
+   - kpis.user_id
+   - kpis.year, kpis.quarter
+   - kpi_evidence.kpi_id
+   - kpi_comments.kpi_id
+
+2. Implement pagination:
+   - Default: 20 items per page
+   - Max: 100 items per page
+
+3. Use eager loading:
+   - Load relationships when needed
+   - Avoid N+1 query problems
+
+4. Cache static data:
+   - Templates
+   - System settings
+   - User roles (in memory)
+
+5. Optimize file serving:
+   - Let Nginx serve files directly
+   - Set proper cache headers
+
+FRONTEND:
+1. Code splitting:
+   - Lazy load routes
+   - Lazy load heavy components
+
+2. Image optimization:
+   - Compress uploads
+   - Use WebP format
+   - Lazy load images
+
+3. Caching:
+   - Cache API responses (5 min)
+   - Cache static assets
+
+4. Bundle optimization:
+   - Tree shaking
+   - Minification
+   - Remove unused code
+
+DATABASE:
+1. SQLite optimizations:
+   - WAL mode for better concurrency
+   - Regular VACUUM
+   - Analyze query plans
+
+2. Backup strategy:
+   - Daily full backup
+   - Keep last 30 days
+   - Test restore monthly
+
+================================================================================
+TROUBLESHOOTING COMMON ISSUES
+================================================================================
+
+ISSUE: Database locked
+SOLUTION: Enable WAL mode, reduce concurrent writes
+
+ISSUE: File upload fails
+SOLUTION: Check permissions on /data/uploads, verify file size limit
+
+ISSUE: Slow queries
+SOLUTION: Add indexes, check for N+1 queries, use EXPLAIN
+
+ISSUE: Memory usage high
+SOLUTION: Reduce workers, check for memory leaks, restart containers
+
+ISSUE: Cannot connect to backend
+SOLUTION: Check Docker network, verify CORS settings, check firewall
+
+ISSUE: JWT token expired
+SOLUTION: Implement token refresh, increase expiry time
+
+ISSUE: PDF generation slow
+SOLUTION: Generate async, cache common reports
+
+================================================================================
+FUTURE ENHANCEMENTS (Beyond MVP)
+================================================================================
+
+NICE TO HAVE (Post-Launch):
+□ Real-time notifications (WebSocket)
+□ Advanced analytics with BI dashboards
+□ Mobile app (React Native)
+□ API rate limiting
+□ Audit log with detailed tracking
+□ Advanced search with ElasticSearch
+□ Integration with HR systems
+□ Multi-language support
+□ Dark mode
+□ Custom themes
+□ Advanced reporting with custom templates
+□ Data export to various formats
+□ Import KPIs from Excel
+□ Gantt chart view for KPI timelines
+□ Calendar integration
+□ Automated reminders via email/Slack
+□ Performance comparison across departments
+□ Goal setting wizard
+□ AI-powered insights (optional)
+
+================================================================================
+SUCCESS METRICS
+================================================================================
+
+TECHNICAL:
+□ System uptime: >99%
+□ Page load time: <3 seconds
+□ API response time: <500ms
+□ Database size: <500MB (first year)
+□ Zero data loss
+□ Zero security breaches
+
+BUSINESS:
+□ User adoption: 100% of target users
+□ KPI completion rate: >80% on time
+□ User satisfaction: >4/5 rating
+□ Support tickets: <10 per month
+□ Training time: <2 hours per user
+
+================================================================================
+FINAL NOTES FOR CLAUDE CODE
+================================================================================
+
+BUILD APPROACH:
+1. Start with Phase 1 (Core Infrastructure)
+2. Get it working end-to-end first
+3. Test each feature before moving to next phase
+4. Commit frequently with clear messages
+5. Document as you go
+6. Ask for clarification if requirements are unclear
+
+CODE QUALITY:
+□ Follow PEP 8 for Python
+□ Follow ESLint rules for JavaScript
+□ Write clear comments
+□ Use meaningful variable names
+□ Keep functions small and focused
+□ Handle errors gracefully
+□ Log important actions
+
+WHAT TO PRIORITIZE:
+1. Security first
+2. Core functionality
+3. User experience
+4. Performance
+5. Nice-to-have features
+
+WHAT TO AVOID:
+✗ Over-engineering for scale (it's 30 users!)
+✗ Complex caching strategies
+✗ Microservices architecture
+✗ Message queues (Celery/RabbitMQ)
+✗ External services (unless free)
+✗ Complex CI/CD (keep it simple)
+
+REMEMBER:
+- This is a real-world system for ~30 users
+- Keep it simple, maintainable, and cost-effective
+- Production-ready means reliable, not perfect
+- Documentation is as important as code
+- Think about the person who will maintain this
+
+================================================================================
+READY TO BUILD!
+================================================================================
+
+You now have everything needed to build a complete, production-ready KPI 
+Management System optimized for small teams. Follow the phases, test 
+thoroughly, and don't hesitate to ask questions.
+
+Target timeline: 6-8 weeks for full MVP
+Estimated effort: 200-240 hours
+
+Good luck! 🚀
+
+================================================================================
+QUICK START COMMANDS
+================================================================================
+
+# 1. Create project structure
+mkdir -p kpi-system/{backend,frontend,data,scripts}
+cd kpi-system
+
+# 2. Initialize backend
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install fastapi uvicorn sqlalchemy alembic
+fastapi dev app/main.py
+
+# 3. Initialize frontend
+cd ../frontend
+npm create vite@latest . -- --template react
+npm install
+npm install -D tailwindcss postcss autoprefixer
+npm run dev
+
+# 4. Docker deployment
+docker-compose up -d
+
+# 5. Initialize database
+docker-compose exec backend python scripts/init_db.py
+
+# 6. Create admin user
+docker-compose exec backend python scripts/create_admin.py
+
+# Access application
+http://localhost        # Frontend
+http://localhost:8000   # Backend API
+http://localhost:8000/docs  # API Documentation
+
+================================================================================
+END OF PROMPT
+================================================================================
