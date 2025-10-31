@@ -1,667 +1,346 @@
-# 🎯 KPI Management System - Complete Development Package
+# 🎯 Hệ Thống Quản Lý KPI
 
-> **Lightweight, Self-Hosted KPI Management System**  
-> Optimized for ~30 users | SQLite3 | Docker | Cost-Effective (~$150/year vs $2,500+/year for SaaS)
+> **Hệ thống tự lưu trữ, nhẹ, tiết kiệm chi phí**
+> Tối ưu cho ~30 người dùng | SQLite3 | Docker | Chi phí ~$154/năm (so với $2,500+/năm cho SaaS)
 
----
-
-## 📦 What's Included
-
-This package contains everything you need to build and deploy a production-ready KPI Management System:
-
-1. **`CLAUDE_CODE_PROMPT_KPI_System.txt`** - Complete specification and instructions for Claude Code
-2. **`QUICK_START_GUIDE.md`** - Step-by-step guide to use Claude Code
-3. **`docker-compose.yml`** - Ready-to-use Docker deployment configuration
-4. **`.env.example`** - Environment variables template with all settings
-5. **This README** - Overview and quick reference
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![React 18+](https://img.shields.io/badge/react-18+-61DAFB.svg)](https://reactjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.108+-009688.svg)](https://fastapi.tiangolo.com/)
 
 ---
 
-## 🚀 Quick Start (3 Steps)
+## 📋 Tổng Quan
 
-### Step 1: Setup Project
+Hệ Thống Quản Lý KPI (Key Performance Indicator) hoàn chỉnh, sẵn sàng cho production, được tối ưu hóa cho các đội nhỏ (~30 người dùng). Hệ thống tự chứa (SQLite, local storage), dễ triển khai (Docker Compose), và cực kỳ tiết kiệm chi phí.
+
+### ✨ Tính Năng Chính
+
+- 🔐 **Xác thực & Phân quyền** - JWT auth, 3 vai trò (Admin, Manager, Employee)
+- 📊 **Quản lý KPI** - Theo dõi theo quý (Q1-Q4), workflow phê duyệt
+- 📁 **Quản lý Files** - Upload minh chứng (PDF, Office, images, max 50MB)
+- 📈 **Báo cáo** - Tạo báo cáo PDF/Excel, analytics dashboard
+- 💬 **Cộng tác** - Comments, notifications, activity timeline
+- 🔄 **Backup tự động** - Sao lưu database hàng ngày
+- 🎨 **UI hiện đại** - React + Tailwind CSS, responsive
+
+### 🏗️ Stack Công Nghệ
+
+**Backend:**
+- FastAPI (Python 3.11+)
+- SQLAlchemy ORM + SQLite3
+- JWT Authentication
+- APScheduler (background jobs)
+
+**Frontend:**
+- React 18+ + Vite
+- Tailwind CSS
+- Axios + React Router
+
+**Deployment:**
+- Docker + Docker Compose
+- Nginx reverse proxy
+- Single server deployment
+
+---
+
+## 🚀 Quick Start
+
+### Yêu Cầu
+
+- Docker & Docker Compose
+- Git
+
+### Cài Đặt
 
 ```bash
-# Create project directory
-mkdir kpi-system
-cd kpi-system
+# 1. Clone repository
+git clone https://github.com/haintbotast/bsv-okr-kpi.git
+cd bsv-okr-kpi
 
-# Copy the provided files into the project directory
-# - docker-compose.yml
-# - .env.example
+# 2. Cấu hình môi trường
+cp backend/.env.example backend/.env
+# Chỉnh sửa backend/.env:
+# - SECRET_KEY (tạo với: openssl rand -hex 32)
+# - ADMIN_PASSWORD
+# - CORS_ORIGINS
 
-# Create .env from example
-cp .env.example .env
+# 3. Khởi động services
+docker-compose -f deployment/docker-compose.yml up -d
 
-# IMPORTANT: Edit .env and update these values:
-# - SECRET_KEY (generate with: openssl rand -hex 32)
-# - CORS_ORIGINS (add your domain)
-# - ADMIN_EMAIL and ADMIN_PASSWORD
-```
+# 4. Khởi tạo database
+docker-compose -f deployment/docker-compose.yml exec backend python scripts/init_db.py
 
-### Step 2: Build with Claude Code
-
-```bash
-# Start Claude Code in your project directory
-claude-code
-
-# In Claude Code, paste the entire CLAUDE_CODE_PROMPT_KPI_System.txt content
-# Then say: "Build this system starting with Phase 1"
-
-# Claude Code will create all the code!
-```
-
-### Step 3: Deploy
-
-```bash
-# Start the application
-docker-compose up -d
-
-# Initialize database
-docker-compose exec backend python scripts/init_db.py
-
-# Create admin user
-docker-compose exec backend python scripts/create_admin.py \
+# 5. Tạo admin user
+docker-compose -f deployment/docker-compose.yml exec backend python scripts/create_admin.py \
   --email admin@company.com \
   --password "SecurePassword123!" \
   --fullname "System Admin"
 
-# Access your application
-# http://localhost (or your server IP)
+# 6. Truy cập ứng dụng
+# http://localhost
 ```
+
+**Chi tiết**: Xem [GETTING_STARTED.md](./GETTING_STARTED.md)
 
 ---
 
-## 🎯 System Overview
-
-### Key Features
-
-- ✅ **User Management** - Admin, Manager, Employee roles with RBAC
-- ✅ **KPI Tracking** - Create, track, and manage KPIs by quarters (Q1-Q4)
-- ✅ **File Management** - Upload evidence (PDF, Office docs, images)
-- ✅ **Approval Workflow** - Submit → Review → Approve/Reject
-- ✅ **Reporting** - Generate PDF/Excel reports
-- ✅ **Dashboard** - Visual analytics and progress tracking
-- ✅ **Comments** - Collaboration on KPIs
-- ✅ **Notifications** - In-app notification system
-- ✅ **Audit Log** - Track all activities
-- ✅ **Automated Backup** - Daily database backups
-
-### Technical Stack
-
-**Backend:**
-- FastAPI (Python 3.11+)
-- SQLAlchemy ORM
-- SQLite3 Database
-- JWT Authentication
-- APScheduler for background jobs
-
-**Frontend:**
-- React 18+
-- Tailwind CSS
-- Vite build tool
-- Axios for API calls
-- React Router for navigation
-
-**Deployment:**
-- Docker & Docker Compose
-- Nginx reverse proxy
-- Local file storage
-- Single server deployment
-
-### Architecture
+## 📁 Cấu Trúc Dự Án
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                     Users                           │
-│              (Browsers/Mobile)                      │
-└───────────────────────┬─────────────────────────────┘
-                        │ HTTPS
-                        ↓
-┌─────────────────────────────────────────────────────┐
-│              Nginx (Port 80/443)                    │
-│         • Serves React Frontend                     │
-│         • Proxies API to Backend                    │
-│         • Serves uploaded files                     │
-└───────────────────────┬─────────────────────────────┘
-                        │
-        ┌───────────────┴───────────────┐
-        ↓                               ↓
-┌──────────────────┐          ┌──────────────────┐
-│   Frontend       │          │    Backend       │
-│   Container      │          │    Container     │
-│   (React+Nginx)  │          │    (FastAPI)     │
-│                  │          │                  │
-│   Port: 80       │          │   Port: 8000     │
-└──────────────────┘          └────────┬─────────┘
-                                       │
-                     ┌─────────────────┼─────────────────┐
-                     ↓                 ↓                 ↓
-              ┌───────────┐     ┌──────────┐     ┌──────────┐
-              │  SQLite   │     │  Uploads │     │ Backups  │
-              │  Database │     │   Files  │     │   Files  │
-              │           │     │          │     │          │
-              │  kpi.db   │     │  /data   │     │  /data   │
-              └───────────┘     └──────────┘     └──────────┘
-```
-
-### File Structure (After Building with Claude Code)
-
-```
-kpi-system/
-├── backend/
+bsv-okr-kpi/
+├── backend/               # FastAPI backend
+│   ├── app/              # Application code
+│   ├── scripts/          # Utility scripts
+│   ├── tests/            # Backend tests
 │   ├── Dockerfile
 │   ├── requirements.txt
-│   ├── alembic.ini
-│   ├── app/
-│   │   ├── main.py
-│   │   ├── models/
-│   │   ├── api/
-│   │   ├── crud/
-│   │   └── services/
-│   ├── scripts/
-│   │   ├── init_db.py
-│   │   ├── create_admin.py
-│   │   └── backup.py
-│   └── tests/
+│   └── README.md
 │
-├── frontend/
+├── frontend/             # React frontend
+│   ├── src/              # Source code
+│   ├── public/           # Static assets
 │   ├── Dockerfile
-│   ├── nginx.conf
 │   ├── package.json
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   └── contexts/
-│   └── public/
+│   └── README.md
 │
-├── data/                    # Created automatically
-│   ├── database/
-│   │   └── kpi.db
-│   ├── uploads/
-│   ├── backups/
-│   └── logs/
+├── deployment/           # Docker configs
+│   ├── docker-compose.yml      # Development
+│   ├── docker-compose.prod.yml # Production
+│   └── nginx.prod.conf
 │
-├── docker-compose.yml
-├── .env
-└── README.md
+├── docs/                 # Documentation (Vietnamese)
+│   ├── ARCHITECTURE.md   # System architecture
+│   ├── DATABASE.md       # Database schema
+│   ├── SECURITY.md       # Security practices
+│   ├── DEPLOYMENT.md     # Deployment guide
+│   ├── MAINTENANCE.md    # Maintenance guide
+│   ├── API.md            # API docs (Vietnamese)
+│   └── technical/        # English technical specs
+│       ├── API_REFERENCE.md
+│       ├── DEVELOPMENT_PHASES.md
+│       └── SPECIFICATION.txt
+│
+├── data/                 # Runtime data (gitignored)
+│   ├── database/         # SQLite database
+│   ├── uploads/          # Uploaded files
+│   ├── backups/          # Database backups
+│   └── logs/             # Application logs
+│
+├── scripts/              # Utility scripts
+├── .github/              # GitHub Actions (optional)
+├── GETTING_STARTED.md    # Quick start guide
+├── CONTRIBUTING.md       # Contribution guidelines
+├── CHANGELOG.md          # Version history
+└── LICENSE               # MIT License
 ```
 
 ---
 
-## 📖 Development Workflow
+## 📖 Tài Liệu
 
-### Using Claude Code (Recommended)
+### Bắt Đầu
+- **[GETTING_STARTED.md](./GETTING_STARTED.md)** - Hướng dẫn nhanh, setup, workflow với Claude Code
+- **[backend/README.md](./backend/README.md)** - Backend setup và development
+- **[frontend/README.md](./frontend/README.md)** - Frontend setup và development
 
-1. **Open Claude Code** in your project directory
-   ```bash
-   claude-code
-   ```
+### Kỹ Thuật (Vietnamese)
+- **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - Kiến trúc hệ thống, quyết định thiết kế
+- **[docs/DATABASE.md](./docs/DATABASE.md)** - Schema database, queries
+- **[docs/SECURITY.md](./docs/SECURITY.md)** - Best practices bảo mật
+- **[docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)** - Hướng dẫn triển khai production
+- **[docs/MAINTENANCE.md](./docs/MAINTENANCE.md)** - Bảo trì, troubleshooting
+- **[docs/API.md](./docs/API.md)** - Tài liệu API (tiếng Việt)
 
-2. **Paste the prompt** from `CLAUDE_CODE_PROMPT_KPI_System.txt`
+### Kỹ Thuật (English)
+- **[docs/technical/API_REFERENCE.md](./docs/technical/API_REFERENCE.md)** - Complete API reference
+- **[docs/technical/DEVELOPMENT_PHASES.md](./docs/technical/DEVELOPMENT_PHASES.md)** - 7-phase development plan
+- **[docs/technical/SPECIFICATION.txt](./docs/technical/SPECIFICATION.txt)** - Full system specification
 
-3. **Follow the phases:**
-   - Phase 1: Core Infrastructure (Week 1)
-   - Phase 2: KPI Management (Week 1)
-   - Phase 3: File Management (Week 1)
-   - Phase 4: Workflow & Collaboration (Week 1)
-   - Phase 5: Reporting & Analytics (Week 1)
-   - Phase 6: Admin Features (Week 1)
-   - Phase 7: Optimization & Polish (Week 2)
-
-4. **Test after each phase:**
-   ```bash
-   # Backend tests
-   cd backend
-   pytest
-   
-   # Frontend dev server
-   cd frontend
-   npm run dev
-   
-   # Full stack with Docker
-   docker-compose up -d
-   ```
-
-### Manual Development (Without Claude Code)
-
-If you prefer to code manually, the prompt file contains:
-- Complete database schema
-- API endpoint specifications
-- Component structure
-- Business logic requirements
-- Security guidelines
-- Best practices
+### Contributing
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Guidelines cho contributors
+- **[CHANGELOG.md](./CHANGELOG.md)** - Version history
 
 ---
 
-## 🛠️ Common Commands
+## 🎯 Vai Trò Người Dùng
 
-### Development
+| Vai trò | Quyền hạn |
+|---------|-----------|
+| **Admin** | Toàn quyền: quản lý users, templates, settings, xem tất cả KPIs |
+| **Manager** | Phê duyệt KPIs của đội, xem KPIs của đội, tạo KPIs riêng, báo cáo đội |
+| **Employee** | Tạo KPIs riêng, gửi phê duyệt, upload minh chứng, báo cáo cá nhân |
+
+---
+
+## 💰 So Sánh Chi Phí
+
+### DIY (Hệ thống này)
+- **Server**: $12/tháng (2GB RAM, 2 CPU)
+- **Domain**: $10/năm
+- **SSL**: Miễn phí (Let's Encrypt)
+- **Tổng**: **~$154/năm** (không giới hạn users)
+
+### SaaS Alternatives (30 users)
+- **Perdoo**: $2,880/năm
+- **Weekdone**: $2,520/năm
+- **Quantive**: $3,600/năm
+
+**💰 Tiết kiệm: $2,366 - $3,446/năm (94-96% rẻ hơn!)**
+
+---
+
+## 🛠️ Development
+
+### Backend Development
 
 ```bash
-# Backend development
 cd backend
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 venv\Scripts\activate     # Windows
 pip install -r requirements.txt
 uvicorn app.main:app --reload
+```
 
-# Frontend development
+### Frontend Development
+
+```bash
 cd frontend
 npm install
 npm run dev
-
-# Database migrations
-alembic revision --autogenerate -m "description"
-alembic upgrade head
 ```
 
-### Docker Deployment
+### Testing
 
 ```bash
-# Start services
-docker-compose up -d
+# Backend tests
+cd backend
+pytest --cov=app tests/
 
-# View logs
-docker-compose logs -f
-docker-compose logs -f backend
-docker-compose logs -f frontend
-
-# Stop services
-docker-compose down
-
-# Rebuild after code changes
-docker-compose up -d --build
-
-# Execute commands in containers
-docker-compose exec backend bash
-docker-compose exec backend python scripts/backup.py
-```
-
-### Database Management
-
-```bash
-# Initialize database (first time)
-docker-compose exec backend python scripts/init_db.py
-
-# Create admin user
-docker-compose exec backend python scripts/create_admin.py
-
-# Backup database
-docker-compose exec backend python scripts/backup.py
-# Or manually:
-cp data/database/kpi.db data/backups/kpi_$(date +%Y%m%d).db
-
-# Restore database
-docker-compose down
-cp data/backups/kpi_YYYYMMDD.db data/database/kpi.db
-docker-compose up -d
-
-# Run migrations
-docker-compose exec backend alembic upgrade head
+# Frontend tests (if configured)
+cd frontend
+npm test
 ```
 
 ---
 
-## 🔒 Security Checklist
+## 🚀 Deployment
 
-Before deploying to production:
+### Development
 
-- [ ] Change `SECRET_KEY` in `.env` (use `openssl rand -hex 32`)
-- [ ] Update `ADMIN_PASSWORD` with a strong password
-- [ ] Configure `CORS_ORIGINS` with your actual domain
-- [ ] Set up HTTPS with Let's Encrypt
-- [ ] Review file upload restrictions
-- [ ] Enable automated backups
-- [ ] Set up log rotation
-- [ ] Configure firewall rules
-- [ ] Change default ports (optional)
-- [ ] Set up monitoring (optional)
-
----
-
-## 📊 Cost Comparison
-
-### DIY Solution (This System)
-
-| Item | Cost | Note |
-|------|------|------|
-| VPS Server (2GB RAM, 2 CPU) | $12/month | DigitalOcean, Linode, Hetzner |
-| Domain | $10/year | Namecheap, Cloudflare |
-| SSL Certificate | Free | Let's Encrypt |
-| **Total** | **~$154/year** | For unlimited users |
-
-### SaaS Alternatives (30 users)
-
-| Service | Cost/User/Month | Annual Cost (30 users) |
-|---------|-----------------|------------------------|
-| Perdoo | $8 | $2,880 |
-| Weekdone | $7 | $2,520 |
-| Quantive | $10 | $3,600 |
-
-**💰 Savings: $2,366 - $3,446 per year (94-96% cheaper!)**
-
-**ROI:**
-- Development: 6-8 weeks (with Claude Code)
-- Break-even: < 3 months
-- Ongoing: Free (except server costs)
-
----
-
-## 🎯 System Capacity
-
-Optimized for:
-- ✅ **30 users** (can scale to 100+ if needed)
-- ✅ **5,000-10,000 KPIs** per year
-- ✅ **50,000+ file uploads** (up to 50MB each)
-- ✅ **100,000+ comments/notifications**
-
-Database size estimate:
-- Year 1: ~500 MB
-- Year 2: ~1 GB
-- Year 3: ~1.5 GB
-
-Server resources:
-- **CPU**: 2 cores (sufficient)
-- **RAM**: 2GB (comfortable)
-- **Disk**: 20GB SSD (ample space)
-- **Network**: 10 Mbps
-
----
-
-## 📱 User Roles & Permissions
-
-### Admin
-- Full system access
-- Manage users
-- Manage templates
-- System settings
-- View all KPIs
-- Generate reports
-
-### Manager
-- Approve/reject team KPIs
-- View team KPIs
-- Create own KPIs
-- Generate team reports
-- Add comments
-
-### Employee
-- Create own KPIs
-- Submit for approval
-- Upload evidence
-- Add comments
-- View own dashboard
-- Generate own reports
-
----
-
-## 🔧 Troubleshooting
-
-### Common Issues
-
-**Issue: Cannot start containers**
 ```bash
-# Check if ports are in use
-sudo lsof -i :80
-sudo lsof -i :8000
-
-# Check Docker service
-sudo systemctl status docker
-
-# View container logs
-docker-compose logs
+docker-compose -f deployment/docker-compose.yml up -d
 ```
 
-**Issue: Database locked**
+### Production
+
 ```bash
-# Enable WAL mode (better for concurrency)
-docker-compose exec backend python -c "
-import sqlite3
-conn = sqlite3.connect('/data/database/kpi.db')
-conn.execute('PRAGMA journal_mode=WAL')
-conn.close()
-"
+docker-compose -f deployment/docker-compose.prod.yml up -d --build
 ```
 
-**Issue: File upload fails**
-```bash
-# Check permissions
-docker-compose exec backend ls -la /data/uploads
-
-# Fix permissions
-docker-compose exec backend chmod 777 /data/uploads
-```
-
-**Issue: Frontend can't reach backend**
-```bash
-# Check CORS settings in .env
-# Verify backend is running
-curl http://localhost:8000/health
-
-# Check Docker network
-docker network inspect kpi-system_kpi-network
-```
-
----
-
-## 📚 Documentation
-
-After building with Claude Code, you'll have:
-
-1. **API Documentation** - Automatic Swagger UI at `/docs`
-2. **User Guide** - In-app help and tooltips
-3. **Admin Guide** - System administration documentation
-4. **Technical Docs** - Code comments and README files
-
-Access API docs:
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
+**Chi tiết**: Xem [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)
 
 ---
 
 ## 🧪 Testing
 
-### Backend Tests
+- **Unit Tests**: pytest (backend), vitest (frontend - optional)
+- **E2E Tests**: Playwright/Cypress (optional)
+- **Manual Testing**: Checklist trong [docs/technical/DEVELOPMENT_PHASES.md](./docs/technical/DEVELOPMENT_PHASES.md)
 
-```bash
-cd backend
-pytest
-pytest --cov=app tests/
-pytest -v tests/test_auth.py
-```
-
-### Frontend Tests (if implemented)
-
-```bash
-cd frontend
-npm test
-npm run test:e2e
-```
-
-### Manual Testing Checklist
-
-- [ ] User can register/login
-- [ ] User can create KPI
-- [ ] User can upload files
-- [ ] Manager can approve/reject
-- [ ] Reports generate correctly
-- [ ] Dashboard shows data
-- [ ] Comments work
-- [ ] Notifications appear
-- [ ] Mobile responsive
-- [ ] Works on Chrome, Firefox, Safari
+**Target Coverage**: >70%
 
 ---
 
-## 🚀 Deployment to Production
+## 📊 Capacity
 
-### Step 1: Server Setup
+Hệ thống được thiết kế cho:
+- ✅ 30 users (có thể scale lên 100+)
+- ✅ 5,000-10,000 KPIs/năm
+- ✅ 50,000+ file uploads (50MB max mỗi file)
+- ✅ 100,000+ comments/notifications
 
-```bash
-# Update system
-sudo apt update && sudo apt upgrade -y
-
-# Install Docker
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-
-# Install Docker Compose
-sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-
-# Verify installation
-docker --version
-docker-compose --version
-```
-
-### Step 2: Deploy Application
-
-```bash
-# Clone or copy your code to server
-git clone your-repo-url kpi-system
-cd kpi-system
-
-# Configure environment
-cp .env.example .env
-nano .env  # Edit with production settings
-
-# Start services
-docker-compose up -d
-
-# Initialize
-docker-compose exec backend python scripts/init_db.py
-docker-compose exec backend python scripts/create_admin.py
-```
-
-### Step 3: Setup SSL (Let's Encrypt)
-
-```bash
-# Install certbot
-sudo apt install certbot python3-certbot-nginx
-
-# Get certificate
-sudo certbot --nginx -d your-domain.com
-
-# Test auto-renewal
-sudo certbot renew --dry-run
-```
-
-### Step 4: Setup Backup Automation
-
-```bash
-# Create backup script
-cat > backup.sh << 'EOF'
-#!/bin/bash
-DATE=$(date +%Y%m%d_%H%M%S)
-docker-compose exec backend python scripts/backup.py
-echo "Backup completed: $DATE"
-EOF
-
-chmod +x backup.sh
-
-# Add to crontab (daily at 2 AM)
-(crontab -l 2>/dev/null; echo "0 2 * * * /path/to/kpi-system/backup.sh") | crontab -
-```
+**Server Requirements**:
+- CPU: 2 cores
+- RAM: 2GB
+- Disk: 20GB SSD
 
 ---
 
-## 📈 Monitoring (Optional)
+## 🔒 Bảo Mật
 
-### Basic Monitoring
+- 🔐 JWT authentication (8h access + 7d refresh tokens)
+- 🔑 bcrypt password hashing (cost 12+)
+- 👥 RBAC (Role-Based Access Control)
+- 📁 File upload validation (type + size)
+- 🛡️ CORS whitelist configuration
+- 🔒 HTTPS/SSL support (Let's Encrypt)
 
-```bash
-# Check container health
-docker-compose ps
-
-# View resource usage
-docker stats
-
-# Check disk space
-df -h
-
-# View application logs
-docker-compose logs --tail=100 -f backend
-```
-
-### Advanced Monitoring (Optional)
-
-Consider adding:
-- **Uptime Kuma** - Simple uptime monitoring
-- **Grafana + Prometheus** - Detailed metrics
-- **Sentry** - Error tracking
-- **New Relic** - Application performance monitoring
+Xem chi tiết: [docs/SECURITY.md](./docs/SECURITY.md)
 
 ---
 
-## 🤝 Support & Contributing
+## 🤝 Contributing
 
-### Getting Help
-
-1. **Check the documentation** in the prompt file
-2. **Search issues** in project repository (if using Git)
-3. **Ask Claude Code** for clarification
-4. **Review logs** for error messages
-
-### Contributing
-
-If you improve the system:
-1. Document changes clearly
-2. Update relevant documentation
-3. Test thoroughly before deployment
-4. Share improvements with your team
+Chúng tôi hoan nghênh contributions! Xem [CONTRIBUTING.md](./CONTRIBUTING.md) để biết:
+- Coding standards
+- Git workflow
+- Testing requirements
+- Pull request process
 
 ---
 
-## 📝 Changelog
+## 📝 License
 
-### Version 1.0.0 (Initial Release)
-- Complete KPI management system
-- User management with RBAC
-- File upload and management
-- Approval workflow
-- Reporting (PDF/Excel)
-- Dashboard with analytics
-- Docker deployment
-- Automated backups
+MIT License - xem [LICENSE](./LICENSE) để biết chi tiết.
 
 ---
 
-## 📜 License
+## 🙏 Acknowledgments
 
-This project is provided as-is for internal company use. Customize as needed for your organization.
-
----
-
-## 🎉 Ready to Build!
-
-You now have everything needed to create your KPI Management System:
-
-1. ✅ Complete specification (Prompt file)
-2. ✅ Step-by-step guide (Quick Start Guide)
-3. ✅ Ready-to-use Docker setup
-4. ✅ Configuration templates
-5. ✅ This comprehensive README
-
-**Next Steps:**
-1. Read the **QUICK_START_GUIDE.md**
-2. Open **Claude Code** in your project directory
-3. Paste the prompt from **CLAUDE_CODE_PROMPT_KPI_System.txt**
-4. Start building! 🚀
-
-**Estimated Timeline:**
-- Setup: 1 hour
-- Development with Claude Code: 6-8 weeks
-- Testing & Deployment: 1 week
-- **Total: ~8-9 weeks to production**
-
-**Questions?** Review the documentation files or ask Claude Code for help!
+- **FastAPI** - Modern Python web framework
+- **React** - UI library
+- **SQLite** - Lightweight database
+- **Docker** - Containerization
+- **Tailwind CSS** - Utility-first CSS framework
 
 ---
 
-**Good luck building your KPI Management System!** 💪
+## 📞 Support & Contact
 
-Made with ❤️ for IT Teams managing ~30 users
+- **Documentation**: Xem thư mục `docs/`
+- **Issues**: GitHub Issues (nếu sử dụng GitHub)
+- **Email**: support@company.com (cập nhật email của bạn)
+
+---
+
+## 🗺️ Roadmap
+
+### Version 1.0.0 (Current)
+- ✅ Core KPI management
+- ✅ File uploads
+- ✅ Approval workflow
+- ✅ Reports (PDF/Excel)
+- ✅ Docker deployment
+
+### Version 2.0.0 (Planned)
+- 🔄 Real-time notifications (WebSocket)
+- 🔄 Advanced analytics & BI
+- 🔄 Mobile app (React Native)
+- 🔄 Multi-language support
+- 🔄 Dark mode
+
+Xem chi tiết: [CHANGELOG.md](./CHANGELOG.md)
+
+---
+
+## ⭐ Star History
+
+Nếu project này hữu ích, hãy cho một ⭐️!
+
+---
+
+**Built with ❤️ for IT teams managing ~30 users**
+
+🚀 **Ready to start?** Xem [GETTING_STARTED.md](./GETTING_STARTED.md)

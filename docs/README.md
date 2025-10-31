@@ -1,129 +1,222 @@
-# Mục Lục Tài Liệu - Hệ Thống Quản Lý KPI
+# 📚 Tài Liệu Hệ Thống Quản Lý KPI
 
-Chào mừng đến với tài liệu Hệ Thống Quản Lý KPI!
-
----
-
-## 📚 Cấu Trúc Tài Liệu
-
-### Bắt Đầu
-- [README chính](../README.md) - Tổng quan dự án và hướng dẫn nhanh
-- [Hướng Dẫn Nhanh](../QUICK_START_GUIDE.md) - Workflow từng bước với Claude Code
-- [Cấu hình môi trường](../.env.example) - Template biến môi trường
-
-### Kiến Trúc & Thiết Kế
-1. [**01_OVERVIEW.md**](./01_OVERVIEW.md) - Tổng quan dự án, mục tiêu và yêu cầu nghiệp vụ
-2. [**02_KIEN_TRUC.md**](./02_KIEN_TRUC.md) - Kiến trúc hệ thống và các quyết định kỹ thuật
-3. [**03_DATABASE_SCHEMA.md**](./03_DATABASE_SCHEMA.md) - Schema cơ sở dữ liệu đầy đủ
-4. [**04_FEATURES_PHASES.md**](./04_FEATURES_PHASES.md) - Tính năng theo 7 giai đoạn phát triển
-
-### Bảo Mật & Chất Lượng
-5. [**05_BAO_MAT.md**](./05_BAO_MAT.md) - Best practices và hướng dẫn bảo mật
-6. [**06_TESTING.md**](./06_TESTING.md) - Chiến lược testing và quy trình
-
-### Vận Hành
-7. [**07_DEPLOYMENT.md**](./07_DEPLOYMENT.md) - Hướng dẫn deployment và triển khai
-8. [**08_BAO_TRI.md**](./08_BAO_TRI.md) - Bảo trì và xử lý sự cố
-
-### Tài Liệu API
-9. [**API_SPECIFICATION.md**](./API_SPECIFICATION.md) - Tài liệu REST API đầy đủ
+Chào mừng đến với tài liệu hệ thống! Tài liệu đã được tổ chức lại để dễ điều hướng và tối ưu cho quá trình phát triển.
 
 ---
 
-## 🚀 Điều Hướng Nhanh
+## 🗂️ Cấu Trúc Tài Liệu Mới
 
-**Tôi là developer mới bắt đầu:**
-→ Bắt đầu với [Hướng Dẫn Nhanh](../QUICK_START_GUIDE.md)
+### Tài Liệu Tiếng Việt (Vietnamese)
 
-**Tôi muốn hiểu hệ thống:**
-→ Đọc [01_OVERVIEW.md](./01_OVERVIEW.md)
+| File | Mô tả | Đối tượng |
+|------|-------|-----------|
+| [ARCHITECTURE.md](./ARCHITECTURE.md) | Kiến trúc hệ thống, quyết định thiết kế, stack công nghệ | Developers, Architects |
+| [DATABASE.md](./DATABASE.md) | Schema database, relationships, queries | Backend developers |
+| [SECURITY.md](./SECURITY.md) | Best practices bảo mật, OWASP, hardening | All developers, DevOps |
+| [DEPLOYMENT.md](./DEPLOYMENT.md) | Hướng dẫn triển khai production | DevOps, System admins |
+| [MAINTENANCE.md](./MAINTENANCE.md) | Bảo trì, troubleshooting, monitoring | Support team, DevOps |
+| [API.md](./API.md) | Tài liệu API (Vietnamese, condensed) | Frontend & Backend devs |
 
-**Tôi đang implement tính năng:**
-→ Xem [04_FEATURES_PHASES.md](./04_FEATURES_PHASES.md) và [API_SPECIFICATION.md](./API_SPECIFICATION.md)
+### Tài Liệu Tiếng Anh (English) - Technical
 
-**Tôi đang deploy production:**
-→ Làm theo [07_DEPLOYMENT.md](./07_DEPLOYMENT.md)
-
-**Tôi cần troubleshoot:**
-→ Xem [08_BAO_TRI.md](./08_BAO_TRI.md)
-
----
-
-## 📦 Tài Nguyên Bổ Sung
-
-### Files Cấu Hình
-- [docker-compose.yml](../docker-compose.yml) - Cấu hình Docker cho development
-- [docker-compose.prod.yml](../docker-compose.prod.yml) - Cấu hình Docker cho production
-- [.env.example](../.env.example) - Template biến môi trường
-- [.gitignore](../.gitignore) - Quy tắc Git ignore
-- [nginx.prod.conf](../nginx.prod.conf) - Cấu hình Nginx production
-
-### Đóng Góp
-- [CONTRIBUTING.md](../CONTRIBUTING.md) - Hướng dẫn đóng góp cho dự án
-- [CHANGELOG.md](../CHANGELOG.md) - Lịch sử phiên bản
+| File | Description | Audience |
+|------|-------------|----------|
+| [technical/API_REFERENCE.md](./technical/API_REFERENCE.md) | Complete API reference với examples | Frontend & Backend devs |
+| [technical/DEVELOPMENT_PHASES.md](./technical/DEVELOPMENT_PHASES.md) | 7-phase development plan + testing strategy | All developers, PM |
+| [technical/SPECIFICATION.txt](./technical/SPECIFICATION.txt) | Full system specification cho Claude Code | Claude Code users |
 
 ---
 
-## 🔍 Tài Liệu Là Gì?
+## 🚀 Bắt Đầu Nhanh
 
-| Tài liệu | Mục đích | Đối tượng |
-|----------|----------|-----------|
-| README.md | Hướng dẫn nhanh và tổng quan | Tất cả mọi người |
-| QUICK_START_GUIDE.md | Cách dùng Claude Code | Developers |
-| 01_OVERVIEW.md | Tổng quan nghiệp vụ và kỹ thuật | Product owners, Developers |
-| 02_KIEN_TRUC.md | Kiến trúc kỹ thuật | Developers, DevOps |
-| 03_DATABASE_SCHEMA.md | Thiết kế database | Backend developers |
-| 04_FEATURES_PHASES.md | Lộ trình phát triển | Developers, Project managers |
-| 05_BAO_MAT.md | Hướng dẫn bảo mật | Developers, Security team |
-| 06_TESTING.md | Quy trình testing | QA, Developers |
-| 07_DEPLOYMENT.md | Cách triển khai | DevOps, System admins |
-| 08_BAO_TRI.md | Troubleshooting & bảo trì | Support team, DevOps |
-| API_SPECIFICATION.md | Tài liệu API | Frontend & Backend developers |
+### 1. Bạn là Developer mới?
+→ **Đọc theo thứ tự:**
+1. [../GETTING_STARTED.md](../GETTING_STARTED.md) - Setup môi trường
+2. [ARCHITECTURE.md](./ARCHITECTURE.md) - Hiểu kiến trúc hệ thống
+3. [DATABASE.md](./DATABASE.md) - Hiểu database schema
+4. [technical/DEVELOPMENT_PHASES.md](./technical/DEVELOPMENT_PHASES.md) - Kế hoạch phát triển
+5. [../backend/README.md](../backend/README.md) hoặc [../frontend/README.md](../frontend/README.md) - Setup local dev
 
----
+### 2. Bạn muốn implement tính năng?
+→ **Tham khảo:**
+- [technical/DEVELOPMENT_PHASES.md](./technical/DEVELOPMENT_PHASES.md) - Xem phase tương ứng
+- [API.md](./API.md) hoặc [technical/API_REFERENCE.md](./technical/API_REFERENCE.md) - Xem API specs
+- [DATABASE.md](./DATABASE.md) - Xem database schema
 
-## 💡 Mẹo
+### 3. Bạn đang deploy production?
+→ **Làm theo:**
+1. [SECURITY.md](./SECURITY.md) - Kiểm tra security checklist
+2. [DEPLOYMENT.md](./DEPLOYMENT.md) - Làm theo hướng dẫn deployment
+3. [MAINTENANCE.md](./MAINTENANCE.md) - Setup monitoring và backup
 
-- Bắt đầu với `01_OVERVIEW.md` để hiểu tổng thể
-- Dùng `API_SPECIFICATION.md` làm tài liệu tham khảo chính khi phát triển
-- Giữ `QUICK_START_GUIDE.md` bên tay cho Claude Code workflows
-- Tham khảo file gốc `CLAUDE_CODE_PROMPT_KPI_System.txt` để xem specification đầy đủ
-
----
-
-## 🆘 Cần Giúp Đỡ?
-
-1. Kiểm tra phần tài liệu liên quan ở trên
-2. Xem [Troubleshooting](./08_BAO_TRI.md#common-issues--solutions)
-3. Tìm trong [README chính](../README.md) phần FAQ
-4. Liên hệ: support@company.com
+### 4. Bạn gặp vấn đề?
+→ **Troubleshoot:**
+- [MAINTENANCE.md](./MAINTENANCE.md) - Common issues & solutions
+- [../backend/README.md](../backend/README.md) - Backend troubleshooting
+- [../frontend/README.md](../frontend/README.md) - Frontend troubleshooting
 
 ---
 
-## 📝 Trạng Thái Tài Liệu
+## 📋 So Với Structure Cũ
 
-✅ = Hoàn thành | 🚧 = Đang làm | ⏳ = Dự kiến
+### Files Đã Consolidate
 
-| Tài liệu | Trạng thái |
-|----------|-----------|
-| README.md (Chính) | ✅ |
-| QUICK_START_GUIDE.md | ✅ |
-| 01_OVERVIEW.md | ✅ |
-| 02_KIEN_TRUC.md | ✅ |
-| 03_DATABASE_SCHEMA.md | ✅ |
-| 04_FEATURES_PHASES.md | ✅ |
-| 05_BAO_MAT.md | ✅ |
-| 06_TESTING.md | ✅ |
-| 07_DEPLOYMENT.md | ✅ |
-| 08_BAO_TRI.md | ✅ |
-| API_SPECIFICATION.md | ✅ |
-| CONTRIBUTING.md | ✅ |
-| CHANGELOG.md | ✅ |
+| Files Cũ | File Mới | Lý do |
+|----------|----------|-------|
+| `01_OVERVIEW.md` + `02_KIEN_TRUC.md` | [ARCHITECTURE.md](./ARCHITECTURE.md) | Gộp overview và architecture thành 1 |
+| `03_DATABASE_SCHEMA.md` | [DATABASE.md](./DATABASE.md) | Rename cho ngắn gọn |
+| `04_FEATURES_PHASES.md` + `06_TESTING.md` | [technical/DEVELOPMENT_PHASES.md](./technical/DEVELOPMENT_PHASES.md) | Gộp development plan và testing |
+| `05_BAO_MAT.md` | [SECURITY.md](./SECURITY.md) | Keep as-is, rename |
+| `07_DEPLOYMENT.md` | [DEPLOYMENT.md](./DEPLOYMENT.md) | Keep as-is, rename |
+| `08_BAO_TRI.md` | [MAINTENANCE.md](./MAINTENANCE.md) | Keep as-is, rename |
+| `API_SPECIFICATION_VI.md` | [API.md](./API.md) | Rename cho ngắn gọn (Vietnamese) |
+| `API_SPECIFICATION.md` | [technical/API_REFERENCE.md](./technical/API_REFERENCE.md) | Move vào technical/ (English) |
+| `CLAUDE_CODE_PROMPT_KPI_System.txt` | [technical/SPECIFICATION.txt](./technical/SPECIFICATION.txt) | Move vào technical/ |
+
+### Files Đã Xóa/Merged
+
+- `PR_DESCRIPTION.md` - Meta-doc, không cần thiết sau restructure
+- `QUICK_START_GUIDE.md` - Merged vào `../GETTING_STARTED.md`
+
+**Kết quả**: 24 files documentation → 12 files chính (giảm 50%)
 
 ---
 
-**Lưu ý:** File gốc `CLAUDE_CODE_PROMPT_KPI_System.txt` chứa specification đầy đủ. Các file tài liệu này là phiên bản được tổ chức để dễ điều hướng và tham khảo.
+## 🎯 Lợi Ích Của Structure Mới
+
+### ✅ Ưu Điểm
+
+1. **Ít files hơn** (12 vs 24) - Dễ điều hướng
+2. **Vietnamese-first** - Dễ hiểu cho team Việt Nam
+3. **Implementation-ready** - Structure khớp với codebase sẽ implement
+4. **Tách biệt rõ ràng** - Docs (VI) vs Technical Specs (EN)
+5. **Tìm kiếm nhanh** - Tên files ngắn gọn, mô tả rõ ràng
+
+### 📐 Nguyên Tắc Tổ Chức
+
+- **Vietnamese docs** (`docs/*.md`) - Cho developers làm việc hàng ngày
+- **English technical** (`docs/technical/*.md`) - Technical reference, specifications
+- **Implementation guides** (`backend/README.md`, `frontend/README.md`) - Setup và development
+- **Root docs** (`README.md`, `GETTING_STARTED.md`, etc.) - Entry points
+
+---
+
+## 🔗 Quick Links
+
+### Tài Liệu Chính
+- [📘 README Chính](../README.md)
+- [🚀 Getting Started](../GETTING_STARTED.md)
+- [🏗️ Architecture](./ARCHITECTURE.md)
+- [🗄️ Database](./DATABASE.md)
+- [🔒 Security](./SECURITY.md)
+- [🚢 Deployment](./DEPLOYMENT.md)
+- [🔧 Maintenance](./MAINTENANCE.md)
+- [🔌 API (Vietnamese)](./API.md)
+
+### Tài Liệu Technical (English)
+- [📖 API Reference](./technical/API_REFERENCE.md)
+- [📅 Development Phases](./technical/DEVELOPMENT_PHASES.md)
+- [📝 Full Specification](./technical/SPECIFICATION.txt)
+
+### Implementation Guides
+- [⚙️ Backend Setup](../backend/README.md)
+- [🎨 Frontend Setup](../frontend/README.md)
+- [🤝 Contributing](../CONTRIBUTING.md)
+- [📋 Changelog](../CHANGELOG.md)
+
+---
+
+## 💡 Best Practices Sử Dụng Docs
+
+### Khi Bắt Đầu Dự Án
+1. Đọc `../README.md` - Overview
+2. Đọc `../GETTING_STARTED.md` - Setup
+3. Đọc `ARCHITECTURE.md` - Understand system
+4. Đọc `technical/DEVELOPMENT_PHASES.md` - Development plan
+
+### Khi Develop
+- Tham khảo `API.md` hoặc `technical/API_REFERENCE.md` thường xuyên
+- Check `DATABASE.md` khi làm việc với models
+- Follow `technical/DEVELOPMENT_PHASES.md` để track progress
+
+### Trước Deploy
+- Review `SECURITY.md` - Security checklist
+- Follow `DEPLOYMENT.md` - Step by step
+- Setup theo `MAINTENANCE.md` - Monitoring & backup
+
+### Khi Troubleshoot
+- Check `MAINTENANCE.md` - Common issues
+- Check logs theo hướng dẫn trong `MAINTENANCE.md`
+- Search trong docs với Ctrl+F
+
+---
+
+## 📞 Hỗ Trợ
+
+### Tìm Không Ra Thông Tin?
+
+1. **Search trong docs**: Dùng Ctrl+F trong các file
+2. **Check cấu trúc cũ**: Files cũ vẫn có trong git history
+3. **Hỏi team**: Liên hệ developers khác
+4. **Check source code**: Code có thể có comments bổ sung
+
+### Report Issues
+
+Nếu tìm thấy:
+- Thông tin sai
+- Links bị broken
+- Thiếu documentation
+- Typos
+
+→ Tạo issue hoặc update trực tiếp (nếu có quyền)
+
+---
+
+## 🔄 Cập Nhật Tài Liệu
+
+Khi thay đổi code:
+- **Update docs** tương ứng
+- **Update links** nếu thay đổi file structure
+- **Test links** trước khi commit
+- **Update CHANGELOG.md** nếu cần
+
+Khi thêm tính năng mới:
+- **Update API.md** nếu có API mới
+- **Update ARCHITECTURE.md** nếu thay đổi architecture
+- **Update DATABASE.md** nếu thay đổi schema
+- **Update DEVELOPMENT_PHASES.md** nếu thêm phase mới
+
+---
+
+## 📊 Trạng Thái Tài Liệu
+
+| Tài liệu | Trạng thái | Cập nhật lần cuối |
+|----------|-----------|-------------------|
+| ARCHITECTURE.md | ✅ Complete | 2025-10-31 |
+| DATABASE.md | ✅ Complete | 2025-10-31 |
+| SECURITY.md | ✅ Complete | 2025-10-31 |
+| DEPLOYMENT.md | ✅ Complete | 2025-10-31 |
+| MAINTENANCE.md | ✅ Complete | 2025-10-31 |
+| API.md | ✅ Complete | 2025-10-31 |
+| technical/API_REFERENCE.md | ✅ Complete | 2025-10-31 |
+| technical/DEVELOPMENT_PHASES.md | ✅ Complete | 2025-10-31 |
+| technical/SPECIFICATION.txt | ✅ Complete | 2025-10-31 |
+
+---
+
+## 🎓 Học Từ Docs
+
+Docs này được thiết kế để:
+- **Dễ điều hướng** - Structure rõ ràng
+- **Dễ tìm kiếm** - Tên files mô tả rõ
+- **Bilingual** - Vietnamese + English
+- **Implementation-focused** - Actionable information
+- **Up-to-date** - Theo kịp code changes
+
+**Tip**: Bookmark trang này để dễ quay lại!
 
 ---
 
 **Chúc bạn code vui vẻ!** 🎉
+
+Có câu hỏi? Check [MAINTENANCE.md](./MAINTENANCE.md) hoặc [../CONTRIBUTING.md](../CONTRIBUTING.md)
