@@ -1,22 +1,22 @@
-version: '3.8'
-
 services:
   # Backend API Service
   backend:
     build:
-      context: ./backend
+      context: ../backend
       dockerfile: Dockerfile
     container_name: kpi-backend
+    env_file:
+      - ../backend/.env
     ports:
       - "8000:8000"
     volumes:
       # Persistent data
-      - ./data/database:/data/database
-      - ./data/uploads:/data/uploads
-      - ./data/backups:/data/backups
-      - ./data/logs:/data/logs
+      - ../data/database:/data/database
+      - ../data/uploads:/data/uploads
+      - ../data/backups:/data/backups
+      - ../data/logs:/data/logs
       # Development: Mount source code for hot reload (comment out in production)
-      # - ./backend/app:/app/app
+      # - ../backend/app:/app/app
     environment:
       # Application
       - APP_NAME=KPI Management System
@@ -72,8 +72,10 @@ services:
   # Frontend Web Service
   frontend:
     build:
-      context: ./frontend
+      context: ../frontend
       dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=http://localhost:8000
     container_name: kpi-frontend
     ports:
       - "80:80"
@@ -81,9 +83,9 @@ services:
       # - "443:443"
     volumes:
       # Mount uploads directory for Nginx to serve files
-      - ./data/uploads:/data/uploads:ro
+      - ../data/uploads:/data/uploads:ro
       # For SSL certificates (after Let's Encrypt setup)
-      # - ./certs:/etc/nginx/certs:ro
+      # - ../certs:/etc/nginx/certs:ro
     environment:
       - BACKEND_URL=http://backend:8000
     
@@ -119,13 +121,17 @@ networks:
 # DEPLOYMENT INSTRUCTIONS
 # =============================================================================
 #
+# IMPORTANT: Run all commands from the deployment/ directory
+#
 # 1. FIRST TIME SETUP:
-#    - Copy .env.example to .env
-#    - Update SECRET_KEY in .env (generate with: openssl rand -hex 32)
-#    - Update CORS_ORIGINS in .env with your domain
+#    cd deployment/
+#    # Edit ../backend/.env and update:
+#    # - SECRET_KEY (generate with: openssl rand -hex 32)
+#    # - CORS_ORIGINS with your domain
+#    # - ADMIN_EMAIL and ADMIN_PASSWORD
 #
 # 2. START SERVICES:
-#    docker-compose up -d
+#    docker-compose up -d --build
 #
 # 3. INITIALIZE DATABASE:
 #    docker-compose exec backend python scripts/init_db.py
@@ -148,6 +154,7 @@ networks:
 #    docker-compose down
 #
 # 8. UPDATE APPLICATION:
+#    cd deployment/
 #    git pull origin main
 #    docker-compose down
 #    docker-compose up -d --build
@@ -156,11 +163,11 @@ networks:
 # 9. BACKUP DATABASE:
 #    docker-compose exec backend python scripts/backup.py
 #    # Or manually:
-#    cp data/database/kpi.db data/backups/kpi_$(date +%Y%m%d_%H%M%S).db
+#    cp ../data/database/kpi.db ../data/backups/kpi_$(date +%Y%m%d_%H%M%S).db
 #
 # 10. RESTORE DATABASE:
 #     docker-compose down
-#     cp data/backups/kpi_YYYYMMDD_HHMMSS.db data/database/kpi.db
+#     cp ../data/backups/kpi_YYYYMMDD_HHMMSS.db ../data/database/kpi.db
 #     docker-compose up -d
 #
 # =============================================================================
