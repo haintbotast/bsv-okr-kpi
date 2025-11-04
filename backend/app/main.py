@@ -65,10 +65,18 @@ async def startup_event():
     logger.info(f"Environment: {settings.ENVIRONMENT}")
     logger.info(f"Database: {settings.DATABASE_URL}")
 
+    # Start background scheduler
+    from app.core.scheduler import start_scheduler
+    start_scheduler()
+
 
 @app.on_event("shutdown")
 async def shutdown_event():
     """Run on application shutdown."""
+    # Shutdown scheduler
+    from app.core.scheduler import shutdown_scheduler
+    shutdown_scheduler()
+
     logger.info("Shutting down application")
 
 

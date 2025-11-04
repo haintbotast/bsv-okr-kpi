@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { AuthProvider } from './contexts/AuthContext'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import MainLayout from './components/layout/MainLayout'
+import ErrorBoundary from './components/common/ErrorBoundary'
 
 // Pages
 import LoginPage from './pages/auth/LoginPage'
@@ -19,8 +20,9 @@ import TemplateManagementPage from './pages/admin/TemplateManagementPage'
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <ErrorBoundary>
+      <AuthProvider>
+        <BrowserRouter>
         <Routes>
           {/* Public routes */}
           <Route path="/login" element={<LoginPage />} />
@@ -61,6 +63,7 @@ function App() {
         />
       </BrowserRouter>
     </AuthProvider>
+  </ErrorBoundary>
   )
 }
 
