@@ -14,6 +14,8 @@ import KPIFormPage from './pages/kpi/KPIFormPage'
 import KPIDetailPage from './pages/kpi/KPIDetailPage'
 import ReportsPage from './pages/reports/ReportsPage'
 import AnalyticsDashboard from './pages/reports/AnalyticsDashboard'
+import UserManagementPage from './pages/admin/UserManagementPage'
+import TemplateManagementPage from './pages/admin/TemplateManagementPage'
 
 function App() {
   return (
@@ -40,6 +42,8 @@ function App() {
             <Route path="kpis/:id/edit" element={<KPIFormPage />} />
             <Route path="reports" element={<ReportsPage />} />
             <Route path="analytics" element={<AnalyticsDashboard />} />
+            <Route path="admin/users" element={<UserManagementPage />} />
+            <Route path="admin/templates" element={<TemplateManagementPage />} />
           </Route>
         </Routes>
 

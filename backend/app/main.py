@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 import logging
 
 from app.config import settings
-from app.api.v1 import auth, kpis, templates, files, comments, notifications, analytics
+from app.api.v1 import auth, kpis, templates, files, comments, notifications, analytics, admin
 
 # Configure logging
 logging.basicConfig(
@@ -55,6 +55,7 @@ app.include_router(files.router, prefix="/api/v1", tags=["Files"])
 app.include_router(comments.router, prefix="/api/v1", tags=["Comments"])
 app.include_router(notifications.router, prefix="/api/v1", tags=["Notifications"])
 app.include_router(analytics.router, prefix="/api/v1", tags=["Analytics"])
+app.include_router(admin.router, prefix="/api/v1/admin", tags=["Admin"])
 
 
 @app.on_event("startup")
