@@ -6,6 +6,7 @@ import fileService from '../../services/fileService'
 import { toast } from 'react-toastify'
 import FileUpload from '../../components/file/FileUpload'
 import FileList from '../../components/file/FileList'
+import CommentList from '../../components/comment/CommentList'
 
 function KPIDetailPage() {
   const { id } = useParams()
@@ -333,10 +334,16 @@ function KPIDetailPage() {
         )}
       </div>
 
+      {/* Comments Section */}
+      <div className="card mb-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Comments</h2>
+        <CommentList kpiId={id} />
+      </div>
+
       {/* Placeholder for future sections */}
       <div className="card bg-gray-50">
         <p className="text-gray-600 text-sm">
-          💬 Comments and 📋 history will be available in Phase 4
+          📋 History timeline will be available in a future update
         </p>
       </div>
     </div>

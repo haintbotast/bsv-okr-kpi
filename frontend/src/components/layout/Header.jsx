@@ -1,4 +1,5 @@
 import { useAuth } from '../../hooks/useAuth'
+import NotificationDropdown from '../notification/NotificationDropdown'
 
 function Header() {
   const { user, logout } = useAuth()
@@ -11,6 +12,9 @@ function Header() {
 
         {/* User Menu */}
         <div className="flex items-center space-x-4">
+          {/* Notifications */}
+          <NotificationDropdown />
+
           <div className="text-right">
             <p className="text-sm font-medium text-gray-900">{user?.full_name || user?.email}</p>
             <p className="text-xs text-gray-500 capitalize">{user?.role}</p>

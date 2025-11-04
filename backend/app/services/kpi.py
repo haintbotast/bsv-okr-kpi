@@ -20,6 +20,7 @@ from app.schemas.kpi import (
     DashboardStatistics,
 )
 from app.crud.kpi import kpi_crud, kpi_template_crud
+from app.crud.notification import notification_crud
 import math
 
 
@@ -206,6 +207,10 @@ class KPIService:
                 detail="Cannot submit KPI in current status",
             )
 
+        # Create notification for managers/admins
+        # Note: In a real system, you'd query for all managers/admins
+        # For now, we'll skip this as it requires user role queries
+
         return KPIResponse.model_validate(kpi)
 
     def approve_kpi(
@@ -234,6 +239,16 @@ class KPIService:
                 detail="Cannot approve KPI in current status",
             )
 
+        # Create notification for KPI owner
+        notification_crud.create(
+            db,
+            user_id=kpi.user_id,
+            title="KPI Approved",
+            message=f'Your KPI "{kpi.title}" has been approved by {current_user.full_name}.',
+            notification_type="success",
+            link=f"/kpis/{kpi.id}"
+        )
+
         return KPIResponse.model_validate(kpi)
 
     def reject_kpi(
@@ -261,6 +276,16 @@ class KPIService:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Cannot reject KPI in current status",
             )
+
+        # Create notification for KPI owner
+        notification_crud.create(
+            db,
+            user_id=kpi.user_id,
+            title="KPI Rejected",
+            message=f'Your KPI "{kpi.title}" has been rejected by {current_user.full_name}. Reason: {reject_data.reason}',
+            notification_type="error",
+            link=f"/kpis/{kpi.id}"
+        )
 
         return KPIResponse.model_validate(kpi)
 
