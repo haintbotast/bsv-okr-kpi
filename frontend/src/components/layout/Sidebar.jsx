@@ -11,7 +11,8 @@ function Sidebar() {
     { path: '/dashboard', label: 'Dashboard', icon: '📊', roles: ['admin', 'manager', 'employee'] },
     { path: '/kpis', label: 'My KPIs', icon: '🎯', roles: ['admin', 'manager', 'employee'] },
     { path: '/approvals', label: 'Approvals', icon: '✅', roles: ['admin', 'manager'] },
-    { path: '/reports', label: 'Reports', icon: '📈', roles: ['admin', 'manager', 'employee'] },
+    { path: '/analytics', label: 'Analytics', icon: '📈', roles: ['admin', 'manager', 'employee'] },
+    { path: '/reports', label: 'Reports', icon: '📄', roles: ['admin', 'manager', 'employee'] },
     { path: '/admin/users', label: 'Users', icon: '👥', roles: ['admin'] },
     { path: '/admin/templates', label: 'Templates', icon: '📋', roles: ['admin'] },
   ]
