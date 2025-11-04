@@ -8,6 +8,9 @@
 .env.production
 .env.*.local
 
+# Deployment environment (symlink or copy)
+deployment/.env
+
 # =============================================================================
 # Python Backend
 # =============================================================================

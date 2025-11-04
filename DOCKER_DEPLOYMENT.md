@@ -1,5 +1,11 @@
 # Docker Deployment Guide
 
+## ✅ Docker Compose V2 Ready!
+
+This project uses **Docker Compose V2** (`docker compose` without hyphen).
+
+All environment variable issues have been resolved!
+
 ## Quick Start
 
 ### 1. Navigate to deployment directory
@@ -7,32 +13,41 @@
 cd /home/haint/Documents/bsv-okr-kpi/deployment/
 ```
 
-### 2. Verify environment file exists
+### 2. Verify environment file (should show symlink)
 ```bash
-ls -la ../backend/.env
+ls -la .env
+# Output: .env -> ../backend/.env
 ```
 
-If the file doesn't exist, the docker-compose.yml will use the default values from `../backend/.env`.
-
-### 3. Start the containers
+If the symlink doesn't exist, create it:
 ```bash
-docker-compose up -d --build
+ln -sf ../backend/.env .env
 ```
 
-### 4. Initialize database (first time only)
+### 3. Test configuration (no warnings should appear)
 ```bash
-docker-compose exec backend python scripts/init_db.py
+docker compose config | head -20
 ```
 
-### 5. Create admin user (first time only)
+### 4. Start the containers
 ```bash
-docker-compose exec backend python scripts/create_admin.py \
+docker compose up -d --build
+```
+
+### 5. Initialize database (first time only)
+```bash
+docker compose exec backend python scripts/init_db.py
+```
+
+### 6. Create admin user (first time only)
+```bash
+docker compose exec backend python scripts/create_admin.py \
   --email admin@company.com \
   --password "SecurePassword123!" \
   --fullname "System Administrator"
 ```
 
-### 6. Access the application
+### 7. Access the application
 - Frontend: http://localhost
 - Backend API: http://localhost:8000
 - API Docs: http://localhost:8000/docs
@@ -45,7 +60,7 @@ docker-compose exec backend python scripts/create_admin.py \
 
 **Problem:** Docker Compose warned about missing `SECRET_KEY` and `CORS_ORIGINS` variables.
 
-**Solution:** Updated `docker-compose.yml` to include:
+**Solution:** Updated `docker compose.yml` to include:
 ```yaml
 services:
   backend:
@@ -66,7 +81,7 @@ This tells Docker Compose to load environment variables from the backend `.env` 
 sudo usermod -aG docker $USER
 
 # Option 2: Run with sudo (temporary solution)
-sudo docker-compose up -d --build
+sudo docker compose up -d --build
 
 # Option 3: Fix socket permissions (not recommended for production)
 sudo chmod 666 /var/run/docker.sock
@@ -76,13 +91,13 @@ sudo chmod 666 /var/run/docker.sock
 
 ### Obsolete Version Field
 
-**Problem:** Warning about obsolete `version` field in docker-compose.yml
+**Problem:** Warning about obsolete `version` field in docker compose.yml
 
 **Solution:** Removed the `version: '3.8'` line (Docker Compose v2+ doesn't need it)
 
 ---
 
-## File Paths in docker-compose.yml
+## File Paths in docker compose.yml
 
 All paths are now relative to the `deployment/` directory:
 
@@ -106,38 +121,38 @@ All paths are now relative to the `deployment/` directory:
 ### View logs
 ```bash
 cd deployment/
-docker-compose logs -f              # All services
-docker-compose logs -f backend      # Backend only
-docker-compose logs -f frontend     # Frontend only
+docker compose logs -f              # All services
+docker compose logs -f backend      # Backend only
+docker compose logs -f frontend     # Frontend only
 ```
 
 ### Stop containers
 ```bash
 cd deployment/
-docker-compose down                 # Stop and remove containers
-docker-compose down -v              # Also remove volumes
+docker compose down                 # Stop and remove containers
+docker compose down -v              # Also remove volumes
 ```
 
 ### Restart services
 ```bash
 cd deployment/
-docker-compose restart backend      # Restart backend only
-docker-compose restart              # Restart all services
+docker compose restart backend      # Restart backend only
+docker compose restart              # Restart all services
 ```
 
 ### Execute commands in containers
 ```bash
 cd deployment/
-docker-compose exec backend bash                           # Shell into backend
-docker-compose exec backend python scripts/backup.py       # Run backup
-docker-compose exec backend alembic upgrade head           # Run migrations
+docker compose exec backend bash                           # Shell into backend
+docker compose exec backend python scripts/backup.py       # Run backup
+docker compose exec backend alembic upgrade head           # Run migrations
 ```
 
 ### Check container status
 ```bash
 cd deployment/
-docker-compose ps                   # List containers
-docker-compose top                  # Show processes
+docker compose ps                   # List containers
+docker compose top                  # Show processes
 ```
 
 ---
@@ -163,7 +178,7 @@ The system reads environment variables from `/backend/.env`. Key variables:
 ### Container won't start
 ```bash
 # Check logs
-docker-compose logs backend
+docker compose logs backend
 
 # Check if ports are available
 sudo netstat -tulpn | grep -E ':(80|8000)'
@@ -172,10 +187,10 @@ sudo netstat -tulpn | grep -E ':(80|8000)'
 ### Database errors
 ```bash
 # Recreate database
-docker-compose down
+docker compose down
 rm -f data/database/kpi.db*
-docker-compose up -d
-docker-compose exec backend python scripts/init_db.py
+docker compose up -d
+docker compose exec backend python scripts/init_db.py
 ```
 
 ### Permission errors on volumes
@@ -186,8 +201,8 @@ chmod -R 755 data/
 ```
 
 ### Frontend can't connect to backend
-1. Check backend is running: `docker-compose ps`
-2. Check backend logs: `docker-compose logs backend`
+1. Check backend is running: `docker compose ps`
+2. Check backend logs: `docker compose logs backend`
 3. Verify CORS_ORIGINS in `.env` includes your frontend URL
 4. Check network: `docker network inspect deployment_kpi-network`
 
@@ -213,7 +228,7 @@ sudo apt-get install certbot python3-certbot-nginx
 # Get certificate
 sudo certbot certonly --standalone -d your-domain.com
 
-# Update docker-compose.yml to mount certificates
+# Update docker compose.yml to mount certificates
 ```
 
 ### 3. Set up automated backups
@@ -222,13 +237,13 @@ sudo certbot certonly --standalone -d your-domain.com
 crontab -e
 
 # Add line (daily backup at 2 AM)
-0 2 * * * cd /home/haint/Documents/bsv-okr-kpi/deployment && docker-compose exec -T backend python scripts/backup.py
+0 2 * * * cd /home/haint/Documents/bsv-okr-kpi/deployment && docker compose exec -T backend python scripts/backup.py
 ```
 
 ### 4. Configure monitoring
 ```bash
 # Install monitoring tools (optional)
-docker-compose logs --tail=100 | grep ERROR
+docker compose logs --tail=100 | grep ERROR
 ```
 
 ---
@@ -257,11 +272,11 @@ sudo usermod -aG docker $USER
 
 # Start from scratch
 cd /home/haint/Documents/bsv-okr-kpi/deployment/
-docker-compose down -v
+docker compose down -v
 sudo rm -rf ../data/*
-docker-compose up -d --build
-docker-compose exec backend python scripts/init_db.py
-docker-compose exec backend python scripts/create_admin.py \
+docker compose up -d --build
+docker compose exec backend python scripts/init_db.py
+docker compose exec backend python scripts/create_admin.py \
   --email admin@company.com \
   --password "Admin123!" \
   --fullname "Administrator"
@@ -278,19 +293,19 @@ echo "API Docs: http://localhost:8000/docs"
 
 ### What was fixed:
 
-1. ✅ **Removed obsolete `version` field** from docker-compose.yml
+1. ✅ **Removed obsolete `version` field** from docker compose.yml
 2. ✅ **Added `env_file`** to backend service to load `../backend/.env`
 3. ✅ **Updated all paths** to be relative to `deployment/` directory:
    - Build contexts: `../backend`, `../frontend`
    - Volumes: `../data/*`
-4. ✅ **Updated deployment instructions** in docker-compose.yml
+4. ✅ **Updated deployment instructions** in docker compose.yml
 5. ✅ **Created this guide** for easy reference
 
 ### How to use:
 
 ```bash
 cd deployment/
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
 The `.env` file will now be properly loaded from `backend/.env`, and all warnings should be resolved!
@@ -304,5 +319,5 @@ sudo usermod -aG docker $USER
 Then logout and login, and run:
 ```bash
 cd /home/haint/Documents/bsv-okr-kpi/deployment/
-docker-compose up -d --build
+docker compose up -d --build
 ```
