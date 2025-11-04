@@ -392,3 +392,4 @@ def _create_history(self, db: Session, kpi_id: int, user_id: int, action: str, .
 - Check `/docs/` for detailed documentation
 - Review phase completion files for examples
 - Run verification scripts: `./verify_phase1.sh`, `./verify_phase2.sh`
+- remember to update the related documents in this project to reflect or matching with this project

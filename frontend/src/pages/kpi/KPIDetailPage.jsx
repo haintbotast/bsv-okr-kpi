@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import kpiService from '../../services/kpiService'
+import fileService from '../../services/fileService'
 import { toast } from 'react-toastify'
+import FileUpload from '../../components/file/FileUpload'
+import FileList from '../../components/file/FileList'
 
 function KPIDetailPage() {
   const { id } = useParams()
@@ -11,9 +14,12 @@ function KPIDetailPage() {
   const [kpi, setKpi] = useState(null)
   const [loading, setLoading] = useState(true)
   const [actionLoading, setActionLoading] = useState(false)
+  const [files, setFiles] = useState([])
+  const [filesLoading, setFilesLoading] = useState(false)
 
   useEffect(() => {
     fetchKPI()
+    fetchFiles()
   }, [id])
 
   const fetchKPI = async () => {
@@ -28,6 +34,28 @@ function KPIDetailPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const fetchFiles = async () => {
+    try {
+      setFilesLoading(true)
+      const data = await fileService.getFilesByKPI(id)
+      setFiles(data)
+    } catch (error) {
+      console.error('Failed to fetch files:', error)
+      // Don't show error toast - files might not be accessible
+      setFiles([])
+    } finally {
+      setFilesLoading(false)
+    }
+  }
+
+  const handleFileUploadComplete = () => {
+    fetchFiles()
+  }
+
+  const handleFileDeleted = (fileId) => {
+    setFiles(files.filter(f => f.id !== fileId))
   }
 
   const handleSubmit = async () => {
@@ -279,10 +307,36 @@ function KPIDetailPage() {
         </dl>
       </div>
 
+      {/* Evidence Files */}
+      <div className="card mb-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Evidence Files</h2>
+
+        {/* Upload section - only show if user owns the KPI */}
+        {kpi.user_id === user?.id && (
+          <div className="mb-6">
+            <FileUpload kpiId={id} onUploadComplete={handleFileUploadComplete} />
+          </div>
+        )}
+
+        {/* Files list */}
+        {filesLoading ? (
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-2 text-sm text-gray-600">Loading files...</p>
+          </div>
+        ) : (
+          <FileList
+            files={files}
+            onFileDeleted={handleFileDeleted}
+            canDelete={kpi.user_id === user?.id || user?.role === 'admin'}
+          />
+        )}
+      </div>
+
       {/* Placeholder for future sections */}
       <div className="card bg-gray-50">
         <p className="text-gray-600 text-sm">
-          📎 Evidence attachments, 💬 comments, and 📋 history will be available in Phase 3 & 4
+          💬 Comments and 📋 history will be available in Phase 4
         </p>
       </div>
     </div>

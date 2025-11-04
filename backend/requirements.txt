@@ -50,6 +50,10 @@ python-docx==1.1.0
 # Image Processing (optional, for thumbnails)
 Pillow==10.2.0
 
+# File operations
+aiofiles==23.2.1
+python-magic==0.4.27
+
 # =============================================================================
 # EMAIL (Optional)
 # =============================================================================
