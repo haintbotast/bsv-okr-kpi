@@ -9,6 +9,9 @@ import MainLayout from './components/layout/MainLayout'
 // Pages
 import LoginPage from './pages/auth/LoginPage'
 import DashboardPage from './pages/dashboard/DashboardPage'
+import KPIListPage from './pages/kpi/KPIListPage'
+import KPIFormPage from './pages/kpi/KPIFormPage'
+import KPIDetailPage from './pages/kpi/KPIDetailPage'
 
 function App() {
   return (
@@ -29,6 +32,10 @@ function App() {
           >
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="kpis" element={<KPIListPage />} />
+            <Route path="kpis/new" element={<KPIFormPage />} />
+            <Route path="kpis/:id" element={<KPIDetailPage />} />
+            <Route path="kpis/:id/edit" element={<KPIFormPage />} />
           </Route>
         </Routes>
 

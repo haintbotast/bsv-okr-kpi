@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 import logging
 
 from app.config import settings
-from app.api.v1 import auth
+from app.api.v1 import auth, kpis, templates
 
 # Configure logging
 logging.basicConfig(
@@ -49,6 +49,8 @@ async def health_check():
 
 # Include routers
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
+app.include_router(kpis.router, prefix="/api/v1/kpis", tags=["KPIs"])
+app.include_router(templates.router, prefix="/api/v1/templates", tags=["Templates"])
 
 
 @app.on_event("startup")
