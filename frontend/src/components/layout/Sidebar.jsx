@@ -15,6 +15,7 @@ function Sidebar() {
     { path: '/reports', label: 'Reports', icon: '📄', roles: ['admin', 'manager', 'employee'] },
     { path: '/admin/users', label: 'Users', icon: '👥', roles: ['admin'] },
     { path: '/admin/templates', label: 'Templates', icon: '📋', roles: ['admin'] },
+    { path: '/admin/settings', label: 'System Settings', icon: '⚙️', roles: ['admin'] },
   ]
 
   const filteredNavItems = navItems.filter(item => item.roles.includes(user?.role))

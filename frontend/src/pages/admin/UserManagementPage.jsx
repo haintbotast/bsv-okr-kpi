@@ -13,6 +13,7 @@ const UserManagementPage = () => {
   const [editingUser, setEditingUser] = useState(null);
   const [formData, setFormData] = useState({
     email: '',
+    username: '',
     full_name: '',
     password: '',
     role: 'employee',
@@ -58,6 +59,7 @@ const UserManagementPage = () => {
     setEditingUser(user);
     setFormData({
       email: user.email,
+      username: user.username,
       full_name: user.full_name,
       password: '',
       role: user.role,
@@ -81,6 +83,7 @@ const UserManagementPage = () => {
     setEditingUser(null);
     setFormData({
       email: '',
+      username: '',
       full_name: '',
       password: '',
       role: 'employee',
@@ -178,6 +181,24 @@ const UserManagementPage = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   required
                 />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  value={formData.username}
+                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  minLength={3}
+                  maxLength={50}
+                  required
+                  disabled={!!editingUser}
+                />
+                {!editingUser && (
+                  <p className="text-xs text-gray-500 mt-1">3-50 characters, will be used for login</p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">

@@ -18,6 +18,7 @@ import ReportsPage from './pages/reports/ReportsPage'
 import AnalyticsDashboard from './pages/reports/AnalyticsDashboard'
 import UserManagementPage from './pages/admin/UserManagementPage'
 import TemplateManagementPage from './pages/admin/TemplateManagementPage'
+import SystemSettingsPage from './pages/admin/SystemSettingsPage'
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
             <Route path="analytics" element={<AnalyticsDashboard />} />
             <Route path="admin/users" element={<UserManagementPage />} />
             <Route path="admin/templates" element={<TemplateManagementPage />} />
+            <Route path="admin/settings" element={<SystemSettingsPage />} />
           </Route>
         </Routes>
 
