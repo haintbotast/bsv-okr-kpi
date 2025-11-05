@@ -4,61 +4,62 @@
 
 set -e
 
-echo "🚀 KPI Management System - Deployment Script"
-echo "=============================================="
-echo ""
+deploy() {
+    echo "🚀 KPI Management System - Deployment Script"
+    echo "=============================================="
+    echo ""
 
-# Check if running from deployment directory
-if [ ! -f "docker-compose.yml" ]; then
-    echo "❌ Error: Please run this script from the deployment/ directory"
-    echo "   cd /home/haint/Documents/bsv-okr-kpi/deployment/"
-    exit 1
-fi
+    # Check if running from deployment directory
+    if [ ! -f "docker-compose.yml" ]; then
+        echo "❌ Error: Please run this script from the deployment/ directory"
+        echo "   cd /home/haint/Documents/bsv-okr-kpi/deployment/"
+        exit 1
+    fi
 
-# Check if .env symlink exists
-if [ ! -L ".env" ]; then
-    echo "⚠️  Warning: .env symlink not found"
-    echo "   Creating symlink to ../backend/.env"
-    ln -sf ../backend/.env .env
-    echo "✅ Symlink created"
-fi
+    # Check if .env symlink exists
+    if [ ! -L ".env" ]; then
+        echo "⚠️  Warning: .env symlink not found"
+        echo "   Creating symlink to ../backend/.env"
+        ln -sf ../backend/.env .env
+        echo "✅ Symlink created"
+    fi
 
-echo "📋 Checking configuration..."
-sg docker -c "docker compose config > /dev/null 2>&1" && echo "✅ Configuration valid" || {
-    echo "❌ Configuration error"
-    exit 1
-}
+    echo "📋 Checking configuration..."
+    sg docker -c "docker compose config > /dev/null 2>&1" && echo "✅ Configuration valid" || {
+        echo "❌ Configuration error"
+        exit 1
+    }
 
-echo ""
-echo "🐳 Starting Docker containers..."
-sg docker -c "docker compose up -d --build"
+    echo ""
+    echo "🐳 Starting Docker containers..."
+    sg docker -c "docker compose up -d --build"
 
-echo ""
-echo "⏳ Waiting for services to be healthy..."
-sleep 5
+    echo ""
+    echo "⏳ Waiting for services to be healthy..."
+    sleep 5
 
-echo ""
-echo "📊 Container status:"
-sg docker -c "docker compose ps"
+    echo ""
+    echo "📊 Container status:"
+    sg docker -c "docker compose ps"
 
-echo ""
-echo "✅ Deployment complete!"
-echo ""
-echo "📍 Access points:"
-echo "   Frontend:  http://localhost"
-echo "   Backend:   http://localhost:8000"
-echo "   API Docs:  http://localhost:8000/docs"
-echo ""
-echo "📝 Next steps:"
-echo "   1. Initialize database (first time only):"
-echo "      ./deploy.sh init"
-echo ""
-echo "   2. Create admin user (first time only):"
-echo "      ./deploy.sh admin"
-echo ""
-echo "   3. View logs:"
-echo "      ./deploy.sh logs"
-echo ""
+    echo ""
+    echo "✅ Deployment complete!"
+    echo ""
+    echo "📍 Access points:"
+    echo "   Frontend:  http://localhost"
+    echo "   Backend:   http://localhost:8000"
+    echo "   API Docs:  http://localhost:8000/docs"
+    echo ""
+    echo "📝 Next steps:"
+    echo "   1. Initialize database (first time only):"
+    echo "      ./deploy.sh init"
+    echo ""
+    echo "   2. Create admin user (first time only):"
+    echo "      ./deploy.sh admin"
+    echo ""
+    echo "   3. View logs:"
+    echo "      ./deploy.sh logs"
+    echo ""
 }
 
 # Handle subcommands

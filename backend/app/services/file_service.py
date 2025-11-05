@@ -21,8 +21,10 @@ ALLOWED_EXTENSIONS = {
     'png': 'image/png',
 }
 
-MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB in bytes
-UPLOAD_DIR = Path("/home/haint/Documents/bsv-okr-kpi/data/uploads")
+from app.config import settings
+
+MAX_FILE_SIZE = settings.MAX_UPLOAD_SIZE
+UPLOAD_DIR = Path(settings.UPLOAD_DIR)
 
 
 class FileService:

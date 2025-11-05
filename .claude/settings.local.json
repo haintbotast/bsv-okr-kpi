@@ -8,7 +8,8 @@
       "Bash(./verify_phase1.sh:*)",
       "Bash(./verify_phase2.sh:*)",
       "Bash(mkdir:*)",
-      "Bash(sg docker:*)"
+      "Bash(sg docker:*)",
+      "Bash(./deploy.sh:*)"
     ],
     "deny": [],
     "ask": []

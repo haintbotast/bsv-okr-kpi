@@ -1,8 +1,9 @@
 """Application configuration."""
 
 from pydantic_settings import BaseSettings
+from pydantic import field_validator
 from functools import lru_cache
-from typing import List
+from typing import List, Union
 
 
 class Settings(BaseSettings):
@@ -24,16 +25,32 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "sqlite:////data/database/kpi.db"
 
     # CORS
-    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:5173"]
+    CORS_ORIGINS: Union[List[str], str] = ["http://localhost:3000", "http://localhost:5173"]
     CORS_ALLOW_CREDENTIALS: bool = True
+
+    @field_validator('CORS_ORIGINS', mode='before')
+    @classmethod
+    def parse_cors_origins(cls, v):
+        """Parse CORS_ORIGINS from comma-separated string or list."""
+        if isinstance(v, str):
+            return [origin.strip() for origin in v.split(',')]
+        return v
 
     # File Upload
     UPLOAD_DIR: str = "/data/uploads"
     MAX_UPLOAD_SIZE: int = 52428800  # 50MB
-    ALLOWED_EXTENSIONS: List[str] = [
+    ALLOWED_EXTENSIONS: Union[List[str], str] = [
         "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx",
         "jpg", "jpeg", "png", "gif"
     ]
+
+    @field_validator('ALLOWED_EXTENSIONS', mode='before')
+    @classmethod
+    def parse_allowed_extensions(cls, v):
+        """Parse ALLOWED_EXTENSIONS from comma-separated string or list."""
+        if isinstance(v, str):
+            return [ext.strip() for ext in v.split(',')]
+        return v
 
     # Backup
     BACKUP_DIR: str = "/data/backups"
