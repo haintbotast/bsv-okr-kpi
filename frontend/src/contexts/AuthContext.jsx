@@ -77,6 +77,7 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated,
     login,
     logout,
+    refreshUser: loadUser,
     hasRole,
     isAdmin,
     isManager,

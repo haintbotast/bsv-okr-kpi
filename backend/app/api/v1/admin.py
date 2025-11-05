@@ -31,7 +31,7 @@ def create_user(
     current_user: User = Depends(require_admin)
 ):
     """Create new user (admin only)."""
-    # Check if user exists
+    # Check if email already exists
     existing = user_crud.get_by_email(db, email=user_in.email)
     if existing:
         raise HTTPException(
@@ -39,7 +39,15 @@ def create_user(
             detail="User with this email already exists"
         )
 
-    user = user_crud.create(db, user_in=user_in)
+    # Check if username already exists
+    existing_username = user_crud.get_by_username(db, username=user_in.username)
+    if existing_username:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User with this username already exists"
+        )
+
+    user = user_crud.create(db, obj_in=user_in)
     return user
 
 

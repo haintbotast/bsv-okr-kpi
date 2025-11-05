@@ -44,6 +44,50 @@ const userService = {
     const response = await api.delete(`/admin/users/${userId}`);
     return response.data;
   },
+
+  /**
+   * Upload own avatar
+   */
+  uploadAvatar: async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await api.post('/upload/avatar', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  /**
+   * Upload avatar for user (admin only)
+   */
+  uploadUserAvatar: async (userId, file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await api.post(`/upload/avatar/${userId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  /**
+   * Delete own avatar
+   */
+  deleteAvatar: async () => {
+    const response = await api.delete('/upload/avatar');
+    return response.data;
+  },
+
+  /**
+   * Delete user avatar (admin only)
+   */
+  deleteUserAvatar: async (userId) => {
+    const response = await api.delete(`/upload/avatar/${userId}`);
+    return response.data;
+  },
 };
 
 export default userService;

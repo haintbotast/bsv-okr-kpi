@@ -20,6 +20,7 @@ class UserBase(BaseModel):
     full_name: Optional[str] = None
     department: Optional[str] = None
     position: Optional[str] = None
+    avatar_url: Optional[str] = None
 
 
 class UserCreate(UserBase):
@@ -33,6 +34,7 @@ class UserUpdate(BaseModel):
     full_name: Optional[str] = None
     department: Optional[str] = None
     position: Optional[str] = None
+    avatar_url: Optional[str] = None
     role: Optional[UserRole] = None
     is_active: Optional[bool] = None
 

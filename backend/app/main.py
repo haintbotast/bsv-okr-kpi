@@ -3,11 +3,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from datetime import datetime, timezone
 import logging
+from pathlib import Path
 
 from app.config import settings
-from app.api.v1 import auth, kpis, templates, files, comments, notifications, analytics, admin
+from app.api.v1 import auth, kpis, templates, files, comments, notifications, analytics, admin, upload
 from app.api.v1 import settings as settings_api
 
 # Configure logging
@@ -58,6 +60,12 @@ app.include_router(notifications.router, prefix="/api/v1", tags=["Notifications"
 app.include_router(analytics.router, prefix="/api/v1", tags=["Analytics"])
 app.include_router(admin.router, prefix="/api/v1/admin", tags=["Admin"])
 app.include_router(settings_api.router, prefix="/api/v1/settings", tags=["Settings"])
+app.include_router(upload.router, prefix="/api/v1/upload", tags=["Upload"])
+
+# Mount static files for uploads
+UPLOAD_DIR = Path("/data/uploads")
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
 
 
 @app.on_event("startup")

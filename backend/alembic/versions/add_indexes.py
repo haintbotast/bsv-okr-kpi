@@ -1,7 +1,7 @@
 """Add performance indexes
 
 Revision ID: add_indexes
-Revises:
+Revises: 001_initial
 Create Date: 2025-01-04
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers
 revision = 'add_indexes'
-down_revision = None
+down_revision = '001_initial'
 branch_labels = None
 depends_on = None
 

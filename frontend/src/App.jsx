@@ -19,6 +19,7 @@ import AnalyticsDashboard from './pages/reports/AnalyticsDashboard'
 import UserManagementPage from './pages/admin/UserManagementPage'
 import TemplateManagementPage from './pages/admin/TemplateManagementPage'
 import SystemSettingsPage from './pages/admin/SystemSettingsPage'
+import UserProfilePage from './pages/profile/UserProfilePage'
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
             <Route path="approvals" element={<ApprovalsPage />} />
             <Route path="reports" element={<ReportsPage />} />
             <Route path="analytics" element={<AnalyticsDashboard />} />
+            <Route path="profile" element={<UserProfilePage />} />
             <Route path="admin/users" element={<UserManagementPage />} />
             <Route path="admin/templates" element={<TemplateManagementPage />} />
             <Route path="admin/settings" element={<SystemSettingsPage />} />
