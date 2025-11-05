@@ -20,7 +20,7 @@ def list_users(
     current_user: User = Depends(require_admin)
 ):
     """List all users (admin only)."""
-    users, _ = user_crud.get_multi(db, skip=skip, limit=limit)
+    users = user_crud.get_multi(db, skip=skip, limit=limit)
     return users
 
 

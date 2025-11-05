@@ -14,8 +14,20 @@ const kpiService = {
    */
   async getKPIs(params = {}) {
     const { skip = 0, limit = 100, user_id, year, quarter, status, search } = params
+
+    // Filter out empty/null values to avoid validation errors
+    const filteredParams = {
+      skip,
+      limit,
+      ...(user_id && { user_id }),
+      ...(year && { year }),
+      ...(quarter && { quarter }),
+      ...(status && { status }),
+      ...(search && { search }),
+    }
+
     const response = await api.get('/kpis', {
-      params: { skip, limit, user_id, year, quarter, status, search },
+      params: filteredParams,
     })
     return response.data
   },

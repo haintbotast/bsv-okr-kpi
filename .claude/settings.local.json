@@ -9,7 +9,9 @@
       "Bash(./verify_phase2.sh:*)",
       "Bash(mkdir:*)",
       "Bash(sg docker:*)",
-      "Bash(./deploy.sh:*)"
+      "Bash(./deploy.sh:*)",
+      "Bash(jobs:*)",
+      "Bash(xargs:*)"
     ],
     "deny": [],
     "ask": []
