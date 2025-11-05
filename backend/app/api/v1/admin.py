@@ -67,13 +67,16 @@ def update_user(
     current_user: User = Depends(require_admin)
 ):
     """Update user (admin only)."""
-    user = user_crud.update(db, user_id=user_id, user_in=user_in)
+    # First get the user
+    user = user_crud.get(db, user_id=user_id)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
-    return user
+    # Then update it
+    updated_user = user_crud.update(db, db_obj=user, obj_in=user_in)
+    return updated_user
 
 
 @router.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)

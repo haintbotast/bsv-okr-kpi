@@ -56,6 +56,15 @@ class CRUDUser:
         db.refresh(db_obj)
         return db_obj
 
+    def delete(self, db: Session, *, user_id: int) -> bool:
+        """Delete user by ID."""
+        user = self.get(db, user_id=user_id)
+        if not user:
+            return False
+        db.delete(user)
+        db.commit()
+        return True
+
     def authenticate(
         self, db: Session, *, email: str, password: str
     ) -> Optional[User]:
