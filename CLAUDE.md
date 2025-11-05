@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 📌 Session Continuity
+
+**IMPORTANT**: Always check `SESSION_NOTES.md` at the start of each session to see:
+- What was recently completed
+- What we're working on next
+- Suggested next steps
+
 ## Project Overview
 
 **KPI Management System** - Self-hosted, lightweight system optimized for ~30 users. Uses SQLite for simplicity and cost-effectiveness (~$154/year vs $2,500+/year for SaaS alternatives).
@@ -12,11 +19,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Deployment: Docker Compose (2 containers)
 - Auth: JWT (8h access + 7d refresh tokens), bcrypt password hashing
 
-**Current Status:** Phase 1 & 2 Complete
-- ✅ Authentication & RBAC (admin, manager, employee)
-- ✅ KPI CRUD with approval workflow
-- ✅ Dashboard with statistics
-- ⏳ Phase 3+ (File management, reports, etc.)
+**Current Status:** All Phases Complete! 🎉
+- ✅ Phase 1-7: All core features (Auth, KPI, Files, Workflow, Reports, Admin, Optimization)
+- ✅ Phase A: Approval workflow enhancements
+- ✅ Phase B: Bug fixes & Category management
+- ✅ User Profile with Avatar Upload (Nov 5, 2025)
+- 🚀 Production ready - Now adding enhancements based on user needs
 
 ## Development Commands
 
