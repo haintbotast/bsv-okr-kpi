@@ -8,6 +8,7 @@ import logging
 
 from app.config import settings
 from app.api.v1 import auth, kpis, templates, files, comments, notifications, analytics, admin
+from app.api.v1 import settings as settings_api
 
 # Configure logging
 logging.basicConfig(
@@ -56,6 +57,7 @@ app.include_router(comments.router, prefix="/api/v1", tags=["Comments"])
 app.include_router(notifications.router, prefix="/api/v1", tags=["Notifications"])
 app.include_router(analytics.router, prefix="/api/v1", tags=["Analytics"])
 app.include_router(admin.router, prefix="/api/v1/admin", tags=["Admin"])
+app.include_router(settings_api.router, prefix="/api/v1/settings", tags=["Settings"])
 
 
 @app.on_event("startup")
