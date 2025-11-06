@@ -15,6 +15,7 @@ from app.config import settings
 from app.api.v1 import auth, kpis, templates, files, comments, notifications, analytics, upload, preferences
 from app.api.v1 import admin, admin_settings  # User management & admin settings endpoints
 from app.api.v1 import settings as settings_api
+from app.api.v1 import objectives  # OKR objectives management
 
 # Configure logging
 logging.basicConfig(
@@ -64,6 +65,7 @@ async def health_check():
 # Include routers
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(kpis.router, prefix="/api/v1/kpis", tags=["KPIs"])
+app.include_router(objectives.router, prefix="/api/v1/objectives", tags=["Objectives"])
 app.include_router(templates.router, prefix="/api/v1/templates", tags=["Templates"])
 app.include_router(files.router, prefix="/api/v1", tags=["Files"])
 app.include_router(comments.router, prefix="/api/v1", tags=["Comments"])

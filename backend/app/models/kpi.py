@@ -61,6 +61,7 @@ class KPI(Base):
     evidence = relationship("KPIEvidence", back_populates="kpi", cascade="all, delete-orphan")
     comments = relationship("KPIComment", back_populates="kpi", cascade="all, delete-orphan")
     history = relationship("KPIHistory", back_populates="kpi", cascade="all, delete-orphan")
+    objective_links = relationship("ObjectiveKPILink", back_populates="kpi", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<KPI {self.title} - {self.year} {self.quarter}>"
