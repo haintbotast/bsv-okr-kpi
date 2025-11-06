@@ -39,11 +39,27 @@ class UserUpdate(BaseModel):
     is_active: Optional[bool] = None
 
 
+class NotificationPreferences(BaseModel):
+    """Schema for notification preferences."""
+    email_notifications: bool = True
+    notify_kpi_submitted: bool = True
+    notify_kpi_approved: bool = True
+    notify_kpi_rejected: bool = True
+    notify_comment_mention: bool = True
+    weekly_digest: bool = True
+
+
 class UserResponse(UserBase):
     """Schema for user response."""
     id: int
     role: UserRole
     is_active: bool
+    email_notifications: bool
+    notify_kpi_submitted: bool
+    notify_kpi_approved: bool
+    notify_kpi_rejected: bool
+    notify_comment_mention: bool
+    weekly_digest: bool
     created_at: datetime
     updated_at: datetime
 

@@ -21,6 +21,15 @@ class User(Base):
     position = Column(String(100), nullable=True)
     avatar_url = Column(String(500), nullable=True)
     is_active = Column(Boolean, default=True, nullable=False)
+
+    # Notification Preferences
+    email_notifications = Column(Boolean, default=True, nullable=False)  # Master email toggle
+    notify_kpi_submitted = Column(Boolean, default=True, nullable=False)  # KPI submitted for approval
+    notify_kpi_approved = Column(Boolean, default=True, nullable=False)  # KPI approved
+    notify_kpi_rejected = Column(Boolean, default=True, nullable=False)  # KPI rejected
+    notify_comment_mention = Column(Boolean, default=True, nullable=False)  # Mentioned in comment
+    weekly_digest = Column(Boolean, default=True, nullable=False)  # Weekly activity digest
+
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
 
