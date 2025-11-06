@@ -54,7 +54,7 @@ class PasswordResetService:
         # Send email
         email_data = {
             "user_name": user.full_name or user.username,
-            "reset_url": reset_url,
+            "reset_link": reset_url,
             "expiry_hours": 24,
         }
 
@@ -113,7 +113,12 @@ class PasswordResetService:
                 detail="Invalid or expired reset token",
             )
 
-        if datetime.now(timezone.utc) > user.reset_token_expires:
+        # Make stored datetime timezone-aware for comparison
+        token_expires = user.reset_token_expires
+        if token_expires.tzinfo is None:
+            token_expires = token_expires.replace(tzinfo=timezone.utc)
+
+        if datetime.now(timezone.utc) > token_expires:
             # Clear expired token
             user_crud.clear_reset_token(db, user=user)
             raise HTTPException(
