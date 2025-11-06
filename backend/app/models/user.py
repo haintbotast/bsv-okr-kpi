@@ -1,6 +1,6 @@
 """User model."""
 
-from sqlalchemy import Boolean, Column, Integer, String, DateTime
+from sqlalchemy import Boolean, Column, Integer, String, DateTime, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.database import Base
@@ -29,6 +29,11 @@ class User(Base):
     notify_kpi_rejected = Column(Boolean, default=True, nullable=False)  # KPI rejected
     notify_comment_mention = Column(Boolean, default=True, nullable=False)  # Mentioned in comment
     weekly_digest = Column(Boolean, default=True, nullable=False)  # Weekly activity digest
+
+    # Password Reset
+    reset_token = Column(String(500), nullable=True)  # Password reset token
+    reset_token_expires = Column(DateTime, nullable=True)  # Reset token expiration
+    password_history = Column(Text, nullable=True)  # JSON array of last 3 password hashes
 
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)

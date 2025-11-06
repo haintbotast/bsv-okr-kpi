@@ -9,7 +9,8 @@ import logging
 from pathlib import Path
 
 from app.config import settings
-from app.api.v1 import auth, kpis, templates, files, comments, notifications, analytics, admin, upload, preferences
+from app.api.v1 import auth, kpis, templates, files, comments, notifications, analytics, upload, preferences
+from app.api.v1 import admin, admin_settings  # User management & admin settings endpoints
 from app.api.v1 import settings as settings_api
 
 # Configure logging
@@ -59,6 +60,7 @@ app.include_router(comments.router, prefix="/api/v1", tags=["Comments"])
 app.include_router(notifications.router, prefix="/api/v1", tags=["Notifications"])
 app.include_router(analytics.router, prefix="/api/v1", tags=["Analytics"])
 app.include_router(admin.router, prefix="/api/v1/admin", tags=["Admin"])
+app.include_router(admin_settings.router, prefix="/api/v1/admin/settings", tags=["Admin Settings"])
 app.include_router(settings_api.router, prefix="/api/v1/settings", tags=["Settings"])
 app.include_router(upload.router, prefix="/api/v1/upload", tags=["Upload"])
 app.include_router(preferences.router, prefix="/api/v1/preferences", tags=["Preferences"])

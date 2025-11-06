@@ -49,9 +49,11 @@
 - ⏳ Phase C.3: Visualizations (Tree, Gantt, Alignment, List) (6-8h)
 - ⏳ Phase C.4: Integration & Testing (3-4h)
 
-**Current Task**: Phase C.0.1 - ✅ COMPLETE! Moving to C.0.2
+**Current Task**: Phase C.0.1 - ✅ Backend Complete!
+**User Feedback**: Add Admin Web UI for SMTP configuration
+**Decision Pending**: Implement C.0.1b (Admin Settings UI - 2h) or continue to C.0.2?
 
-**Progress**: 1/9 phases complete (11%)
+**Progress**: 1/10 phases complete (10%) - Added C.0.1b to plan
 
 ---
 

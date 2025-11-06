@@ -37,4 +37,23 @@ export const authService = {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
   },
+
+  /**
+   * Request password reset
+   */
+  forgotPassword: async email => {
+    const response = await api.post('/auth/forgot-password', { email })
+    return response.data
+  },
+
+  /**
+   * Reset password with token
+   */
+  resetPassword: async (token, newPassword) => {
+    const response = await api.post('/auth/reset-password', {
+      token,
+      new_password: newPassword,
+    })
+    return response.data
+  },
 }

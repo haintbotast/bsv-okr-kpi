@@ -111,3 +111,4 @@ gunicorn==21.2.0
 # To upgrade all packages:
 #   pip install -U -r requirements.txt
 # =============================================================================
+cryptography==41.0.7

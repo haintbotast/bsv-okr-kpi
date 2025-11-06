@@ -1,6 +1,8 @@
 """CRUD operations for User model."""
 
 from typing import Optional
+import json
+from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate
@@ -87,6 +89,68 @@ class CRUDUser:
     def is_manager(self, user: User) -> bool:
         """Check if user is manager or admin."""
         return user.role in ["admin", "manager"]
+
+    def get_password_history(self, user: User) -> list:
+        """Get user's password history (last 3 hashes)."""
+        if not user.password_history:
+            return []
+        try:
+            return json.loads(user.password_history)
+        except (json.JSONDecodeError, TypeError):
+            return []
+
+    def check_password_in_history(self, user: User, password: str) -> bool:
+        """Check if password was used in recent history."""
+        history = self.get_password_history(user)
+        for old_hash in history:
+            if verify_password(password, old_hash):
+                return True
+        return False
+
+    def update_password(
+        self, db: Session, *, user: User, new_password: str
+    ) -> User:
+        """Update user password and maintain password history."""
+        # Get current password history
+        history = self.get_password_history(user)
+
+        # Add current password to history
+        history.insert(0, user.password_hash)
+
+        # Keep only last 3 passwords
+        history = history[:3]
+
+        # Update user
+        user.password_hash = hash_password(new_password)
+        user.password_history = json.dumps(history)
+        user.reset_token = None
+        user.reset_token_expires = None
+        user.updated_at = datetime.now(timezone.utc)
+
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        return user
+
+    def set_reset_token(
+        self, db: Session, *, user: User, token: str, expires: datetime
+    ) -> User:
+        """Set password reset token for user."""
+        user.reset_token = token
+        user.reset_token_expires = expires
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        return user
+
+    def clear_reset_token(self, db: Session, *, user: User) -> User:
+        """Clear password reset token."""
+        user.reset_token = None
+        user.reset_token_expires = None
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        return user
 
 
 user = CRUDUser()

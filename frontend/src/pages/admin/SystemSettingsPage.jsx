@@ -5,8 +5,10 @@
 import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import settingsService from '../../services/settingsService'
+import SMTPSettingsTab from './components/SMTPSettingsTab'
 
 function SystemSettingsPage() {
+  const [activeTab, setActiveTab] = useState('categories') // 'categories' or 'email'
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [showAddModal, setShowAddModal] = useState(false)
@@ -92,8 +94,37 @@ function SystemSettingsPage() {
         <p className="text-gray-600 mt-1">Manage system-wide configuration and settings</p>
       </div>
 
-      {/* KPI Categories Section */}
-      <div className="card">
+      {/* Tabs */}
+      <div className="mb-6 border-b border-gray-200">
+        <nav className="-mb-px flex space-x-8">
+          <button
+            onClick={() => setActiveTab('categories')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'categories'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            📂 KPI Categories
+          </button>
+          <button
+            onClick={() => setActiveTab('email')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'email'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }`}
+          >
+            📧 Email / SMTP
+          </button>
+        </nav>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'categories' && (
+        <>
+          {/* KPI Categories Section */}
+          <div className="card">
         <div className="flex justify-between items-center mb-4">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">KPI Categories</h2>
@@ -148,7 +179,13 @@ function SystemSettingsPage() {
             Total: <span className="font-medium text-gray-900">{categories.length}</span> {categories.length === 1 ? 'category' : 'categories'}
           </p>
         </div>
-      </div>
+          </div>
+        </>
+      )}
+
+      {activeTab === 'email' && (
+        <SMTPSettingsTab />
+      )}
 
       {/* Add Category Modal */}
       {showAddModal && (
