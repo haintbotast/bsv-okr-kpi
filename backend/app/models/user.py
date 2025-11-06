@@ -35,6 +35,11 @@ class User(Base):
     reset_token_expires = Column(DateTime, nullable=True)  # Reset token expiration
     password_history = Column(Text, nullable=True)  # JSON array of last 3 password hashes
 
+    # Account Lockout / Security
+    failed_login_attempts = Column(Integer, default=0, nullable=False)  # Count of consecutive failed login attempts
+    last_failed_login = Column(DateTime, nullable=True)  # Timestamp of last failed login
+    locked_until = Column(DateTime, nullable=True)  # Account locked until this time (null = not locked)
+
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
 

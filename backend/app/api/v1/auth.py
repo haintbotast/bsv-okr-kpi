@@ -1,7 +1,9 @@
 """Authentication endpoints."""
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.api.deps import get_db, get_current_active_user
 from app.schemas.auth import (
@@ -18,10 +20,13 @@ from app.services.password_reset import password_reset_service
 from app.models.user import User
 
 router = APIRouter()
+limiter = Limiter(key_func=get_remote_address)
 
 
 @router.post("/login", response_model=TokenResponse)
+@limiter.limit("5/minute")
 def login(
+    request: Request,
     credentials: LoginRequest,
     db: Session = Depends(get_db),
 ):
@@ -29,6 +34,8 @@ def login(
     Login with email and password.
 
     Returns access token, refresh token, and user information.
+
+    Rate limit: 5 attempts per minute per IP address.
     """
     return auth_service.login(db, credentials)
 
@@ -72,8 +79,10 @@ def logout(
 
 
 @router.post("/forgot-password", response_model=MessageResponse)
+@limiter.limit("3/minute")
 def forgot_password(
-    request: ForgotPasswordRequest,
+    request: Request,
+    forgot_request: ForgotPasswordRequest,
     db: Session = Depends(get_db),
 ):
     """
@@ -81,8 +90,10 @@ def forgot_password(
 
     Sends password reset email to user if account exists.
     Always returns success message to prevent email enumeration.
+
+    Rate limit: 3 attempts per minute per IP address.
     """
-    return password_reset_service.request_password_reset(db, email=request.email)
+    return password_reset_service.request_password_reset(db, email=forgot_request.email)
 
 
 @router.post("/reset-password", response_model=MessageResponse)
