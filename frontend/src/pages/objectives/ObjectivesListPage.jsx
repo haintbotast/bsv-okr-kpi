@@ -228,19 +228,21 @@ function ObjectivesListPage() {
             </select>
           </div>
 
-          {/* Quarter Filter */}
+          {/* Period Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Quarter</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Period</label>
             <select
               value={filters.quarter}
               onChange={e => handleFilterChange('quarter', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="">All Quarters</option>
-              <option value="Q1">Q1</option>
-              <option value="Q2">Q2</option>
-              <option value="Q3">Q3</option>
-              <option value="Q4">Q4</option>
+              <option value="">All Periods</option>
+              <option value="H1">H1 (First Half)</option>
+              <option value="H2">H2 (Second Half)</option>
+              <option value="Q1">Q1 (Jan-Mar)</option>
+              <option value="Q2">Q2 (Apr-Jun)</option>
+              <option value="Q3">Q3 (Jul-Sep)</option>
+              <option value="Q4">Q4 (Oct-Dec)</option>
             </select>
           </div>
 

@@ -17,7 +17,7 @@ function ObjectiveFormPage() {
     title: '',
     description: '',
     year: new Date().getFullYear(),
-    quarter: 'Q1',
+    quarter: '', // Default to Annual
     level: 4, // Default to individual level
     status: 'active',
     department: user?.department || '',
@@ -144,6 +144,7 @@ function ObjectiveFormPage() {
       const submitData = {
         ...formData,
         level: levelMap[parseInt(formData.level)],
+        quarter: formData.quarter || null, // Convert empty string to null for annual objectives
         manual_progress: parseFloat(formData.manual_progress) || 0,
         owner_id: user.id, // Add owner_id for creation
       }
@@ -329,20 +330,25 @@ function ObjectiveFormPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Quarter <span className="text-red-500">*</span>
+                  Period
                 </label>
                 <select
                   name="quarter"
                   value={formData.quarter}
                   onChange={handleChange}
-                  required
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
+                  <option value="">Annual (Full Year)</option>
+                  <option value="H1">H1 - First Half (Jan-Jun)</option>
+                  <option value="H2">H2 - Second Half (Jul-Dec)</option>
                   <option value="Q1">Q1 (Jan-Mar)</option>
                   <option value="Q2">Q2 (Apr-Jun)</option>
                   <option value="Q3">Q3 (Jul-Sep)</option>
                   <option value="Q4">Q4 (Oct-Dec)</option>
                 </select>
+                <p className="text-xs text-gray-500 mt-1">
+                  Leave as "Annual" for year-long objectives, or select specific period
+                </p>
               </div>
             </div>
 

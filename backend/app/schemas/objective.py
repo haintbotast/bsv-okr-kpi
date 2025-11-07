@@ -35,7 +35,7 @@ class ObjectiveBase(BaseModel):
     parent_id: Optional[int] = None
     department: Optional[str] = Field(None, max_length=100)
     year: int = Field(..., ge=2020, le=2100)
-    quarter: Optional[str] = Field(None, pattern="^(Q1|Q2|Q3|Q4)$")
+    quarter: Optional[str] = Field(None, pattern="^(Q1|Q2|Q3|Q4|H1|H2)?$")
     start_date: Optional[date] = None
     end_date: Optional[date] = None
     status: str = Field(default="active", pattern="^(active|completed|abandoned|on_hold)$")
@@ -54,7 +54,7 @@ class ObjectiveUpdate(BaseModel):
     parent_id: Optional[int] = None
     department: Optional[str] = Field(None, max_length=100)
     year: Optional[int] = Field(None, ge=2020, le=2100)
-    quarter: Optional[str] = Field(None, pattern="^(Q1|Q2|Q3|Q4)$")
+    quarter: Optional[str] = Field(None, pattern="^(Q1|Q2|Q3|Q4|H1|H2)?$")
     start_date: Optional[date] = None
     end_date: Optional[date] = None
     status: Optional[str] = Field(None, pattern="^(active|completed|abandoned|on_hold)$")

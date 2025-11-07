@@ -34,7 +34,7 @@ class Objective(Base):
 
     # Time period
     year = Column(Integer, nullable=False, index=True)
-    quarter = Column(String(10), nullable=True, index=True)  # 'Q1', 'Q2', 'Q3', 'Q4', or NULL for annual
+    quarter = Column(String(10), nullable=True, index=True)  # 'Q1', 'Q2', 'Q3', 'Q4', 'H1', 'H2', or NULL for annual
     start_date = Column(Date, nullable=True)
     end_date = Column(Date, nullable=True)
 

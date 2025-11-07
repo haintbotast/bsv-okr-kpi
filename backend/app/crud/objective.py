@@ -311,11 +311,25 @@ class ObjectiveCRUD:
             .scalar()
         )
 
+        # Progress by level - get average progress for each level
+        progress_by_level = {}
+        for level in ["company", "unit", "division", "team", "individual"]:
+            level_query = query.filter(self.model.level == level)
+            level_avg = level_query.with_entities(
+                func.avg(self.model.progress_percentage)
+            ).scalar()
+            level_count = level_query.count()
+            progress_by_level[level] = {
+                "count": level_count,
+                "average_progress": float(level_avg) if level_avg else 0.0,
+            }
+
         return {
             "total": total,
             "by_level": {level: count for level, count in by_level},
             "by_status": {status: count for status, count in by_status},
             "average_progress": float(avg_progress) if avg_progress else 0.0,
+            "progress_by_level": progress_by_level,
         }
 
     def get_objectives_by_kpi(
