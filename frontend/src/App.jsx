@@ -15,6 +15,9 @@ import DashboardPage from './pages/dashboard/DashboardPage'
 import KPIListPage from './pages/kpi/KPIListPage'
 import KPIFormPage from './pages/kpi/KPIFormPage'
 import KPIDetailPage from './pages/kpi/KPIDetailPage'
+import ObjectivesListPage from './pages/objectives/ObjectivesListPage'
+import ObjectiveFormPage from './pages/objectives/ObjectiveFormPage'
+import ObjectiveDetailPage from './pages/objectives/ObjectiveDetailPage'
 import ApprovalsPage from './pages/approvals/ApprovalsPage'
 import ReportsPage from './pages/reports/ReportsPage'
 import AnalyticsDashboard from './pages/reports/AnalyticsDashboard'
@@ -49,6 +52,10 @@ function App() {
             <Route path="kpis/new" element={<KPIFormPage />} />
             <Route path="kpis/:id" element={<KPIDetailPage />} />
             <Route path="kpis/:id/edit" element={<KPIFormPage />} />
+            <Route path="objectives" element={<ObjectivesListPage />} />
+            <Route path="objectives/new" element={<ObjectiveFormPage />} />
+            <Route path="objectives/:id" element={<ObjectiveDetailPage />} />
+            <Route path="objectives/:id/edit" element={<ObjectiveFormPage />} />
             <Route path="approvals" element={<ApprovalsPage />} />
             <Route path="reports" element={<ReportsPage />} />
             <Route path="analytics" element={<AnalyticsDashboard />} />

@@ -10,6 +10,7 @@ function Sidebar() {
   const navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: '📊', roles: ['admin', 'manager', 'employee'] },
     { path: '/kpis', label: 'My KPIs', icon: '🎯', roles: ['admin', 'manager', 'employee'] },
+    { path: '/objectives', label: 'Objectives', icon: '🏢', roles: ['admin', 'manager', 'employee'] },
     { path: '/approvals', label: 'Approvals', icon: '✅', roles: ['admin', 'manager'] },
     { path: '/analytics', label: 'Analytics', icon: '📈', roles: ['admin', 'manager', 'employee'] },
     { path: '/reports', label: 'Reports', icon: '📄', roles: ['admin', 'manager', 'employee'] },
