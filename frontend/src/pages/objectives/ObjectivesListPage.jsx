@@ -36,10 +36,16 @@ function ObjectivesListPage() {
     try {
       setLoading(true)
       const skip = (pagination.page - 1) * pagination.page_size
+
+      // Filter out empty string values
+      const cleanFilters = Object.fromEntries(
+        Object.entries(filters).filter(([_, value]) => value !== '')
+      )
+
       const data = await objectiveService.getObjectives({
         skip,
         limit: pagination.page_size,
-        ...filters,
+        ...cleanFilters,
       })
       setObjectives(data.items || data)
       if (data.total !== undefined) {
@@ -59,7 +65,12 @@ function ObjectivesListPage() {
 
   const fetchStats = async () => {
     try {
-      const statsData = await objectiveService.getStats(filters)
+      // Filter out empty string values
+      const cleanFilters = Object.fromEntries(
+        Object.entries(filters).filter(([_, value]) => value !== '')
+      )
+
+      const statsData = await objectiveService.getStats(cleanFilters)
       setStats(statsData)
     } catch (error) {
       console.error('Failed to fetch stats:', error)
@@ -355,8 +366,8 @@ function ObjectivesListPage() {
                       <span>📅 {objective.year} {objective.quarter}</span>
                       {objective.department && <span>🏢 {objective.department}</span>}
                       {objective.owner_name && <span>👤 {objective.owner_name}</span>}
-                      {objective.linked_kpis_count > 0 && (
-                        <span>🔗 {objective.linked_kpis_count} KPIs</span>
+                      {objective.kpi_count > 0 && (
+                        <span>🔗 {objective.kpi_count} KPIs</span>
                       )}
                       {objective.children_count > 0 && (
                         <span>🌳 {objective.children_count} sub-objectives</span>
@@ -367,20 +378,20 @@ function ObjectivesListPage() {
                   {/* Progress Bar */}
                   <div className="w-32 ml-4">
                     <div className="text-right text-sm font-medium text-gray-700 mb-1">
-                      {Math.round(objective.progress || 0)}%
+                      {Math.round(objective.progress_percentage || 0)}%
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div
                         className={`h-2 rounded-full transition-all ${
-                          objective.progress >= 75
+                          objective.progress_percentage >= 75
                             ? 'bg-green-600'
-                            : objective.progress >= 50
+                            : objective.progress_percentage >= 50
                             ? 'bg-blue-600'
-                            : objective.progress >= 25
+                            : objective.progress_percentage >= 25
                             ? 'bg-yellow-600'
                             : 'bg-red-600'
                         }`}
-                        style={{ width: `${objective.progress || 0}%` }}
+                        style={{ width: `${objective.progress_percentage || 0}%` }}
                       ></div>
                     </div>
                     <div className="text-right text-xs text-gray-500 mt-1">

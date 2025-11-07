@@ -82,6 +82,15 @@ class ObjectiveDetail(ObjectiveResponse):
     kpi_count: int = 0
 
 
+class ObjectiveListResponse(BaseModel):
+    """Schema for objective list response with pagination."""
+    items: List["ObjectiveDetail"]
+    total: int
+    page: int
+    page_size: int
+    total_pages: int
+
+
 class ObjectiveTreeNode(BaseModel):
     """Schema for objective tree node (recursive structure)."""
     id: int

@@ -12,6 +12,7 @@ from app.schemas.objective import (
     ObjectiveUpdate,
     ObjectiveResponse,
     ObjectiveDetail,
+    ObjectiveListResponse,
     ObjectiveTreeNode,
     ObjectiveStats,
     ProgressCalculation,
@@ -57,7 +58,7 @@ def create_objective(
             raise HTTPException(status_code=404, detail="Parent objective not found")
 
         # Validate level hierarchy
-        level_order = {"company": 0, "division": 1, "team": 2, "individual": 3}
+        level_order = {"company": 0, "unit": 1, "division": 2, "team": 3, "individual": 4}
         if level_order[objective_in.level] <= level_order[parent.level]:
             raise HTTPException(
                 status_code=400,
@@ -70,7 +71,7 @@ def create_objective(
     return objective
 
 
-@router.get("", response_model=List[ObjectiveResponse])
+@router.get("", response_model=ObjectiveListResponse)
 def list_objectives(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=500),
@@ -110,7 +111,51 @@ def list_objectives(
         status=status,
         department=department,
     )
-    return objectives
+
+    # Enrich with details
+    items = []
+    for objective in objectives:
+        detail = ObjectiveDetail.model_validate(objective)
+
+        # Add owner name
+        if objective.owner:
+            detail.owner_name = objective.owner.full_name or objective.owner.username
+
+        # Add parent title
+        if objective.parent:
+            detail.parent_title = objective.parent.title
+
+        # Count children and KPIs
+        detail.children_count = len(objective_crud.get_children(db, objective.id))
+        detail.kpi_count = len(objective_crud.get_linked_kpis(db, objective.id))
+
+        items.append(detail)
+
+    # Get total count (without pagination)
+    total_objectives = objective_crud.get_multi(
+        db,
+        skip=0,
+        limit=10000,  # Large number to get all
+        owner_id=owner_id,
+        level=level,
+        year=year,
+        quarter=quarter,
+        status=status,
+        department=department,
+    )
+    total = len(total_objectives)
+
+    # Calculate pagination
+    page = (skip // limit) + 1 if limit > 0 else 1
+    total_pages = (total + limit - 1) // limit if limit > 0 else 1
+
+    return ObjectiveListResponse(
+        items=items,
+        total=total,
+        page=page,
+        page_size=limit,
+        total_pages=total_pages
+    )
 
 
 @router.get("/{objective_id}", response_model=ObjectiveDetail)
