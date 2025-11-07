@@ -318,6 +318,44 @@ class ObjectiveCRUD:
             "average_progress": float(avg_progress) if avg_progress else 0.0,
         }
 
+    def get_objectives_by_kpi(
+        self, db: Session, kpi_id: int
+    ) -> list[dict]:
+        """Get all objectives linked to a KPI with link information."""
+        from app.models.objective import ObjectiveKPILink
+        from app.models.user import User
+
+        links = (
+            db.query(ObjectiveKPILink)
+            .filter(ObjectiveKPILink.kpi_id == kpi_id)
+            .all()
+        )
+
+        result = []
+        for link in links:
+            objective = link.objective
+            if objective:
+                # Get owner name
+                owner = db.query(User).filter(User.id == objective.owner_id).first()
+                owner_name = owner.full_name if owner else None
+
+                result.append({
+                    "objective_id": objective.id,
+                    "objective_title": objective.title,
+                    "objective_level": objective.level,
+                    "objective_status": objective.status,
+                    "objective_progress": objective.progress_percentage,
+                    "objective_year": objective.year,
+                    "objective_quarter": objective.quarter,
+                    "objective_department": objective.department,
+                    "objective_owner_name": owner_name,
+                    "kpi_id": link.kpi_id,
+                    "weight": link.weight,
+                    "linked_at": link.created_at,
+                })
+
+        return result
+
 
 # Create singleton instance
 objective_crud = ObjectiveCRUD()

@@ -159,6 +159,16 @@ const objectiveService = {
     const response = await api.get('/objectives/stats/summary', { params });
     return response.data;
   },
+
+  /**
+   * Get objectives linked to a KPI
+   * @param {number} kpiId - KPI ID
+   * @returns {Promise<Array>} Linked objectives
+   */
+  getObjectivesByKPI: async (kpiId) => {
+    const response = await api.get(`/kpis/${kpiId}/objectives`);
+    return response.data;
+  },
 };
 
 export default objectiveService;

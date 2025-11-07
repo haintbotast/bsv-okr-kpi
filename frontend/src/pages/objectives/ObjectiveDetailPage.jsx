@@ -171,20 +171,32 @@ function ObjectiveDetailPage() {
 
   const getLevelLabel = (level) => {
     const labels = {
+      'company': 'Company',
+      'unit': 'Unit',
+      'division': 'Division',
+      'team': 'Team',
+      'individual': 'Individual',
       0: 'Company',
-      1: 'Division',
-      2: 'Team',
-      3: 'Individual',
+      1: 'Unit',
+      2: 'Division',
+      3: 'Team',
+      4: 'Individual',
     }
     return labels[level] || `Level ${level}`
   }
 
   const getLevelIcon = (level) => {
     const icons = {
+      'company': '🏢',
+      'unit': '🏛️',
+      'division': '🏬',
+      'team': '👥',
+      'individual': '👤',
       0: '🏢',
       1: '🏛️',
-      2: '👥',
-      3: '👤',
+      2: '🏬',
+      3: '👥',
+      4: '👤',
     }
     return icons[level] || '📊'
   }

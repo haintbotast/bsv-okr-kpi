@@ -11,11 +11,12 @@ class Objective(Base):
     """
     Objective model for OKR hierarchical structure.
 
-    Supports 4-level hierarchy:
+    Supports 5-level hierarchy:
     - Level 0: Company goals (parent_id = NULL)
-    - Level 1: Division objectives
-    - Level 2: Team objectives
-    - Level 3: Individual objectives
+    - Level 1: Unit objectives
+    - Level 2: Division objectives
+    - Level 3: Team objectives
+    - Level 4: Individual objectives
     """
     __tablename__ = "objectives"
 
@@ -25,7 +26,7 @@ class Objective(Base):
 
     # Hierarchy
     parent_id = Column(Integer, ForeignKey("objectives.id", ondelete="CASCADE"), nullable=True, index=True)
-    level = Column(String(20), nullable=False, index=True)  # 'company', 'division', 'team', 'individual'
+    level = Column(String(20), nullable=False, index=True)  # 'company', 'unit', 'division', 'team', 'individual'
 
     # Ownership
     owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)

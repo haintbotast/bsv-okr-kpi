@@ -31,7 +31,7 @@ class ObjectiveBase(BaseModel):
     """Base schema for objective."""
     title: str = Field(..., min_length=1, max_length=200)
     description: Optional[str] = None
-    level: str = Field(..., pattern="^(company|division|team|individual)$")
+    level: str = Field(..., pattern="^(company|unit|division|team|individual)$")
     parent_id: Optional[int] = None
     department: Optional[str] = Field(None, max_length=100)
     year: int = Field(..., ge=2020, le=2100)
@@ -50,7 +50,7 @@ class ObjectiveUpdate(BaseModel):
     """Schema for updating objective."""
     title: Optional[str] = Field(None, min_length=1, max_length=200)
     description: Optional[str] = None
-    level: Optional[str] = Field(None, pattern="^(company|division|team|individual)$")
+    level: Optional[str] = Field(None, pattern="^(company|unit|division|team|individual)$")
     parent_id: Optional[int] = None
     department: Optional[str] = Field(None, max_length=100)
     year: Optional[int] = Field(None, ge=2020, le=2100)

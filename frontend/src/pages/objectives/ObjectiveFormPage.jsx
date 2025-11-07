@@ -18,7 +18,7 @@ function ObjectiveFormPage() {
     description: '',
     year: new Date().getFullYear(),
     quarter: 'Q1',
-    level: 3, // Default to individual level
+    level: 4, // Default to individual level
     status: 'active',
     department: user?.department || '',
     parent_id: null,
@@ -38,12 +38,22 @@ function ObjectiveFormPage() {
     try {
       setLoading(true)
       const data = await objectiveService.getObjective(id)
+
+      // Convert string level to integer for form
+      const levelMap = {
+        'company': 0,
+        'unit': 1,
+        'division': 2,
+        'team': 3,
+        'individual': 4
+      }
+
       setFormData({
         title: data.title,
         description: data.description || '',
         year: data.year,
         quarter: data.quarter,
-        level: data.level,
+        level: levelMap[data.level] || 3,
         status: data.status,
         department: data.department || '',
         parent_id: data.parent_id,
@@ -63,10 +73,14 @@ function ObjectiveFormPage() {
   const fetchParentObjectives = async () => {
     try {
       // Fetch objectives that can be parents (based on level)
-      const currentLevel = formData.level
+      const currentLevel = parseInt(formData.level)
       if (currentLevel > 0) {
+        // Convert to string level for API
+        const levelMap = ['company', 'unit', 'division', 'team', 'individual']
+        const parentLevel = levelMap[currentLevel - 1]
+
         const data = await objectiveService.getObjectives({
-          level: currentLevel - 1,
+          level: parentLevel,
           status: 'active',
           year: formData.year,
         })
@@ -117,9 +131,21 @@ function ObjectiveFormPage() {
 
     try {
       setSubmitting(true)
+
+      // Convert level integer to string for backend
+      const levelMap = {
+        0: 'company',
+        1: 'unit',
+        2: 'division',
+        3: 'team',
+        4: 'individual'
+      }
+
       const submitData = {
         ...formData,
+        level: levelMap[parseInt(formData.level)],
         manual_progress: parseFloat(formData.manual_progress) || 0,
+        owner_id: user.id, // Add owner_id for creation
       }
 
       if (isEditMode) {
@@ -218,9 +244,10 @@ function ObjectiveFormPage() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
               >
                 <option value="0">🏢 Company Level (0)</option>
-                <option value="1">🏛️ Division Level (1)</option>
-                <option value="2">👥 Team Level (2)</option>
-                <option value="3">👤 Individual Level (3)</option>
+                <option value="1">🏛️ Unit Level (1)</option>
+                <option value="2">🏢 Division Level (2)</option>
+                <option value="3">👥 Team Level (3)</option>
+                <option value="4">👤 Individual Level (4)</option>
               </select>
               {isEditMode && (
                 <p className="text-xs text-gray-500 mt-1">

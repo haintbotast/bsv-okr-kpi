@@ -17,6 +17,7 @@ from app.schemas.kpi import (
     KPIStatistics,
     DashboardStatistics,
 )
+from app.schemas.objective import ObjectiveKPILinkResponse
 from app.services.kpi import kpi_service
 
 router = APIRouter()
@@ -210,3 +211,18 @@ def reject_kpi(
     return kpi_service.reject_kpi(
         db, kpi_id=kpi_id, reject_data=reject_data, current_user=current_user
     )
+
+
+@router.get("/{kpi_id}/objectives", response_model=list[ObjectiveKPILinkResponse])
+def get_kpi_objectives(
+    kpi_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """
+    Get all objectives linked to this KPI.
+
+    Returns list of objectives with their link information (weight).
+    """
+    from app.crud.objective import objective_crud
+    return objective_crud.get_objectives_by_kpi(db, kpi_id=kpi_id)

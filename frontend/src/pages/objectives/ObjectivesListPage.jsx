@@ -87,30 +87,48 @@ function ObjectivesListPage() {
 
   const getLevelLabel = level => {
     const labels = {
+      'company': 'Company',
+      'unit': 'Unit',
+      'division': 'Division',
+      'team': 'Team',
+      'individual': 'Individual',
       0: 'Company',
-      1: 'Division',
-      2: 'Team',
-      3: 'Individual',
+      1: 'Unit',
+      2: 'Division',
+      3: 'Team',
+      4: 'Individual',
     }
     return labels[level] || `Level ${level}`
   }
 
   const getLevelColor = level => {
     const colors = {
+      'company': 'bg-purple-100 text-purple-800',
+      'unit': 'bg-indigo-100 text-indigo-800',
+      'division': 'bg-blue-100 text-blue-800',
+      'team': 'bg-green-100 text-green-800',
+      'individual': 'bg-yellow-100 text-yellow-800',
       0: 'bg-purple-100 text-purple-800',
-      1: 'bg-blue-100 text-blue-800',
-      2: 'bg-green-100 text-green-800',
-      3: 'bg-yellow-100 text-yellow-800',
+      1: 'bg-indigo-100 text-indigo-800',
+      2: 'bg-blue-100 text-blue-800',
+      3: 'bg-green-100 text-green-800',
+      4: 'bg-yellow-100 text-yellow-800',
     }
     return colors[level] || 'bg-gray-100 text-gray-800'
   }
 
   const getLevelIcon = level => {
     const icons = {
+      'company': '🏢',
+      'unit': '🏛️',
+      'division': '🏬',
+      'team': '👥',
+      'individual': '👤',
       0: '🏢',
       1: '🏛️',
-      2: '👥',
-      3: '👤',
+      2: '🏬',
+      3: '👥',
+      4: '👤',
     }
     return icons[level] || '📊'
   }
@@ -224,10 +242,11 @@ function ObjectivesListPage() {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">All Levels</option>
-              <option value="0">Company</option>
-              <option value="1">Division</option>
-              <option value="2">Team</option>
-              <option value="3">Individual</option>
+              <option value="company">Company</option>
+              <option value="unit">Unit</option>
+              <option value="division">Division</option>
+              <option value="team">Team</option>
+              <option value="individual">Individual</option>
             </select>
           </div>
 

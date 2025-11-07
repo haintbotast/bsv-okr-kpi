@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import kpiService from '../../services/kpiService'
 import fileService from '../../services/fileService'
+import objectiveService from '../../services/objectiveService'
 import { toast } from 'react-toastify'
 import FileUpload from '../../components/file/FileUpload'
 import FileList from '../../components/file/FileList'
@@ -17,10 +18,13 @@ function KPIDetailPage() {
   const [actionLoading, setActionLoading] = useState(false)
   const [files, setFiles] = useState([])
   const [filesLoading, setFilesLoading] = useState(false)
+  const [linkedObjectives, setLinkedObjectives] = useState([])
+  const [objectivesLoading, setObjectivesLoading] = useState(false)
 
   useEffect(() => {
     fetchKPI()
     fetchFiles()
+    fetchLinkedObjectives()
   }, [id])
 
   const fetchKPI = async () => {
@@ -48,6 +52,19 @@ function KPIDetailPage() {
       setFiles([])
     } finally {
       setFilesLoading(false)
+    }
+  }
+
+  const fetchLinkedObjectives = async () => {
+    try {
+      setObjectivesLoading(true)
+      const data = await objectiveService.getObjectivesByKPI(id)
+      setLinkedObjectives(data)
+    } catch (error) {
+      console.error('Failed to fetch linked objectives:', error)
+      setLinkedObjectives([])
+    } finally {
+      setObjectivesLoading(false)
     }
   }
 
@@ -265,6 +282,85 @@ function KPIDetailPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Linked Objectives */}
+      <div className="card mb-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          Linked Objectives ({linkedObjectives.length})
+        </h2>
+        {objectivesLoading ? (
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-2 text-sm text-gray-600">Loading objectives...</p>
+          </div>
+        ) : linkedObjectives.length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-gray-600 mb-2">This KPI is not linked to any objectives yet</p>
+            <p className="text-sm text-gray-500">Objectives can link to this KPI from the Objectives page</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {linkedObjectives.map((link) => (
+              <div key={link.objective_id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <div className="flex-1">
+                  <Link
+                    to={`/objectives/${link.objective_id}`}
+                    className="text-blue-600 hover:text-blue-700 font-medium text-lg"
+                  >
+                    🏢 {link.objective_title}
+                  </Link>
+                  <div className="flex items-center gap-4 text-sm text-gray-600 mt-2">
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      link.objective_level === 'company' || link.objective_level === 0 ? 'bg-purple-100 text-purple-800' :
+                      link.objective_level === 'unit' || link.objective_level === 1 ? 'bg-indigo-100 text-indigo-800' :
+                      link.objective_level === 'division' || link.objective_level === 2 ? 'bg-blue-100 text-blue-800' :
+                      link.objective_level === 'team' || link.objective_level === 3 ? 'bg-green-100 text-green-800' :
+                      'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {link.objective_level === 'company' || link.objective_level === 0 ? 'Company' :
+                       link.objective_level === 'unit' || link.objective_level === 1 ? 'Unit' :
+                       link.objective_level === 'division' || link.objective_level === 2 ? 'Division' :
+                       link.objective_level === 'team' || link.objective_level === 3 ? 'Team' :
+                       'Individual'}
+                    </span>
+                    <span>{link.objective_year} {link.objective_quarter}</span>
+                    {link.objective_department && <span>🏢 {link.objective_department}</span>}
+                    {link.objective_owner_name && <span>👤 {link.objective_owner_name}</span>}
+                    <span className="font-medium">Weight: {link.weight}%</span>
+                  </div>
+                </div>
+                <div className="ml-4 w-32">
+                  <div className="text-right text-sm font-medium text-gray-700 mb-1">
+                    {Math.round(link.objective_progress || 0)}%
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className={`h-2 rounded-full transition-all ${
+                        link.objective_progress >= 75
+                          ? 'bg-green-600'
+                          : link.objective_progress >= 50
+                          ? 'bg-blue-600'
+                          : link.objective_progress >= 25
+                          ? 'bg-yellow-600'
+                          : 'bg-red-600'
+                      }`}
+                      style={{ width: `${link.objective_progress || 0}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {linkedObjectives.length > 0 && (
+          <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-800">
+              💡 <strong>Progress Impact:</strong> This KPI contributes to {linkedObjectives.length} objective{linkedObjectives.length > 1 ? 's' : ''} with the specified weights.
+              When you update this KPI's progress, the linked objectives will automatically recalculate their progress.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Details */}
