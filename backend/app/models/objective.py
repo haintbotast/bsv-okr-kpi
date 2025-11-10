@@ -41,6 +41,7 @@ class Objective(Base):
     # Progress
     status = Column(String(20), nullable=False, default="active", index=True)  # active, completed, abandoned, on_hold
     progress_percentage = Column(Float, nullable=False, default=0.0)
+    is_featured = Column(Integer, nullable=False, default=0)  # 0 = not featured, 1 = featured (using Integer for SQLite boolean)
 
     # Metadata
     created_at = Column(DateTime, server_default=func.now(), nullable=False)

@@ -169,6 +169,36 @@ const objectiveService = {
     const response = await api.get(`/kpis/${kpiId}/objectives`);
     return response.data;
   },
+
+  /**
+   * Get objectives in cascade view with KPIs
+   * @param {Object} params - Query parameters (year, level)
+   * @returns {Promise<Array>} Cascade hierarchy
+   */
+  getCascadeView: async (params = {}) => {
+    const response = await api.get('/objectives/cascade/view', { params });
+    return response.data;
+  },
+
+  /**
+   * Get featured/pinned objectives
+   * @param {Object} params - Query parameters (year)
+   * @returns {Promise<Array>} Featured objectives
+   */
+  getFeaturedObjectives: async (params = {}) => {
+    const response = await api.get('/objectives/featured', { params });
+    return response.data;
+  },
+
+  /**
+   * Toggle featured/pinned status of an objective
+   * @param {number} id - Objective ID
+   * @returns {Promise<Object>} Updated objective
+   */
+  toggleFeatured: async (id) => {
+    const response = await api.post(`/objectives/${id}/toggle-featured`);
+    return response.data;
+  },
 };
 
 export default objectiveService;

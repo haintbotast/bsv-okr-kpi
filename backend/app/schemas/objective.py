@@ -105,6 +105,41 @@ class ObjectiveTreeNode(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class KPISummary(BaseModel):
+    """Schema for KPI summary in cascade view."""
+    id: int
+    title: str
+    progress_percentage: float
+    target_value: Optional[float] = None
+    current_value: Optional[float] = None
+    unit: Optional[str] = None
+    weight: float = 1.0
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ObjectiveCascadeNode(BaseModel):
+    """Schema for objective cascade node with KPIs (recursive structure)."""
+    id: int
+    title: str
+    description: Optional[str] = None
+    level: str
+    progress_percentage: float
+    status: str
+    year: int
+    quarter: Optional[str] = None
+    owner_id: int
+    owner_name: Optional[str] = None
+    department: Optional[str] = None
+    kpi_count: int = 0
+    children_count: int = 0
+    is_featured: bool = False
+    kpis: List[KPISummary] = []
+    children: List["ObjectiveCascadeNode"] = []
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class ObjectiveGanttItem(BaseModel):
     """Schema for Gantt chart item."""
     id: int

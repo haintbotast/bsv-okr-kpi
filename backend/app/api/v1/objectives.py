@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_db, get_current_active_user
 from app.models.user import User
-from app.models.objective import Objective
+from app.models.objective import Objective, ObjectiveKPILink
 from app.schemas.objective import (
     ObjectiveCreate,
     ObjectiveUpdate,
@@ -14,6 +14,8 @@ from app.schemas.objective import (
     ObjectiveDetail,
     ObjectiveListResponse,
     ObjectiveTreeNode,
+    ObjectiveCascadeNode,
+    KPISummary,
     ObjectiveStats,
     ProgressCalculation,
     ObjectiveKPILinkCreate,
@@ -340,6 +342,161 @@ def get_objective_tree(
         return [build_tree_node(obj) for obj in tree]
     else:
         return [build_tree_node(tree)]
+
+
+@router.get("/cascade/view", response_model=List[ObjectiveCascadeNode])
+def get_objectives_cascade(
+    year: Optional[int] = Query(None, description="Filter by year"),
+    level: Optional[str] = Query(None, description="Top level to start from (default: company)"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """
+    Get objectives in cascade view with KPIs included.
+
+    Returns objectives starting from specified level (default: company)
+    with nested children and linked KPIs.
+    """
+    # Default to company level if not specified
+    if not level:
+        level = "company"
+
+    # Get top-level objectives
+    query = db.query(Objective).filter(Objective.level == level)
+
+    if year:
+        query = query.filter(Objective.year == year)
+
+    # Get objectives at top level
+    top_objectives = query.all()
+
+    def build_cascade_node(obj: Objective) -> ObjectiveCascadeNode:
+        """Recursively build cascade node with KPIs and children."""
+        # Get owner name
+        owner_name = obj.owner.full_name if obj.owner else None
+
+        # Get linked KPIs
+        kpi_links = objective_crud.get_linked_kpis(db, obj.id)
+        kpis = []
+        for kpi in kpi_links:
+            # Get weight from link
+            link = db.query(ObjectiveKPILink).filter(
+                ObjectiveKPILink.objective_id == obj.id,
+                ObjectiveKPILink.kpi_id == kpi.id
+            ).first()
+
+            kpis.append(KPISummary(
+                id=kpi.id,
+                title=kpi.title,
+                progress_percentage=kpi.progress_percentage or 0.0,
+                target_value=kpi.target_value,
+                current_value=kpi.current_value,
+                unit=kpi.unit,
+                weight=link.weight if link else 1.0
+            ))
+
+        # Get children objectives
+        children = objective_crud.get_children(db, obj.id)
+
+        return ObjectiveCascadeNode(
+            id=obj.id,
+            title=obj.title,
+            description=obj.description,
+            level=obj.level,
+            progress_percentage=obj.progress_percentage,
+            status=obj.status,
+            year=obj.year,
+            quarter=obj.quarter,
+            owner_id=obj.owner_id,
+            owner_name=owner_name,
+            department=obj.department,
+            kpi_count=len(kpis),
+            children_count=len(children),
+            is_featured=bool(obj.is_featured),
+            kpis=kpis,
+            children=[build_cascade_node(child) for child in children]
+        )
+
+    return [build_cascade_node(obj) for obj in top_objectives]
+
+
+@router.get("/featured", response_model=List[ObjectiveCascadeNode])
+def get_featured_objectives(
+    year: Optional[int] = Query(None, description="Filter by year"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Get all featured/pinned objectives with their KPIs and children."""
+    from app.models.objective import ObjectiveKPILink
+
+    featured = objective_crud.get_featured(db, year=year)
+
+    def build_cascade_node(obj: Objective) -> ObjectiveCascadeNode:
+        """Build cascade node with KPIs and children."""
+        owner_name = obj.owner.full_name if obj.owner else None
+
+        # Get linked KPIs
+        kpi_links = objective_crud.get_linked_kpis(db, obj.id)
+        kpis = []
+        for kpi in kpi_links:
+            link = db.query(ObjectiveKPILink).filter(
+                ObjectiveKPILink.objective_id == obj.id,
+                ObjectiveKPILink.kpi_id == kpi.id
+            ).first()
+
+            kpis.append(KPISummary(
+                id=kpi.id,
+                title=kpi.title,
+                progress_percentage=kpi.progress_percentage or 0.0,
+                target_value=kpi.target_value,
+                current_value=kpi.current_value,
+                unit=kpi.unit,
+                weight=link.weight if link else 1.0
+            ))
+
+        children = objective_crud.get_children(db, obj.id)
+
+        return ObjectiveCascadeNode(
+            id=obj.id,
+            title=obj.title,
+            description=obj.description,
+            level=obj.level,
+            progress_percentage=obj.progress_percentage,
+            status=obj.status,
+            year=obj.year,
+            quarter=obj.quarter,
+            owner_id=obj.owner_id,
+            owner_name=owner_name,
+            department=obj.department,
+            kpi_count=len(kpis),
+            children_count=len(children),
+            is_featured=True,
+            kpis=kpis,
+            children=[build_cascade_node(child) for child in children]
+        )
+
+    return [build_cascade_node(obj) for obj in featured]
+
+
+@router.post("/{objective_id}/toggle-featured", response_model=ObjectiveResponse)
+def toggle_featured_objective(
+    objective_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Toggle the featured/pinned status of an objective. Manager/Admin only."""
+    objective = objective_crud.get(db, objective_id)
+    if not objective:
+        raise HTTPException(status_code=404, detail="Objective not found")
+
+    # Only managers/admins can feature objectives
+    if current_user.role == "employee":
+        raise HTTPException(
+            status_code=403, detail="Only managers and admins can feature objectives"
+        )
+
+    updated = objective_crud.toggle_featured(db, objective_id)
+    return updated
 
 
 @router.post("/{objective_id}/move", response_model=ObjectiveResponse)

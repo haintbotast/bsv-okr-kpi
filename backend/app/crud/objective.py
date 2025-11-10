@@ -370,6 +370,29 @@ class ObjectiveCRUD:
 
         return result
 
+    def toggle_featured(self, db: Session, objective_id: int) -> Objective:
+        """Toggle the featured status of an objective."""
+        objective = self.get(db, objective_id)
+        if not objective:
+            return None
+
+        # Toggle: 0 -> 1, 1 -> 0
+        objective.is_featured = 1 if objective.is_featured == 0 else 0
+        objective.updated_at = datetime.now(timezone.utc)
+        db.add(objective)
+        db.commit()
+        db.refresh(objective)
+        return objective
+
+    def get_featured(self, db: Session, year: Optional[int] = None) -> List[Objective]:
+        """Get all featured objectives."""
+        query = db.query(self.model).filter(self.model.is_featured == 1)
+
+        if year:
+            query = query.filter(self.model.year == year)
+
+        return query.order_by(self.model.level, self.model.created_at.desc()).all()
+
 
 # Create singleton instance
 objective_crud = ObjectiveCRUD()
