@@ -17,6 +17,28 @@
 
 ## 📝 Recently Completed
 
+### Phase C.5 - Nested OKR Dashboard with Featured Objectives (Nov 10, 2025) ✅
+
+**What was done:**
+- Redesigned dashboard from level-based cards to nested accordion showing Objectives → Key Results hierarchy
+- Added database column: `is_featured` for pinning important objectives
+- Created recursive component: ObjectiveCascadeCard with expand/collapse functionality
+- Implemented 3 new API endpoints: cascade view, featured objectives, toggle featured
+- Added star button for featuring objectives on dashboard
+- Color-coded organizational levels (Company=purple, Unit=indigo, Division=blue, Team=green, Individual=yellow)
+- Company objectives expanded by default, others collapsible
+
+**Files Modified:**
+- Backend: Added migration, updated models/schemas/crud/api (473 lines modified)
+- Frontend: New ObjectiveCascadeCard component, updated services & DashboardPage (568 lines)
+- Documentation: Created DEPLOYMENT_CHECKLIST.md, updated CLAUDE.md with migration procedures
+
+**Issues & Fixes:**
+- Fixed: Database migration not applied → Created deployment checklist to prevent future issues
+- Fixed: Hardcoded `is_featured=True` → Changed to read from database
+
+**Status**: ✅ Complete and deployed. **User needs to refresh browser to see changes.**
+
 ### Phase C.2 - OKR Frontend UI (Nov 7, 2025) ✅
 
 **What was done:**
@@ -221,7 +243,19 @@ After Phase C is complete, these are nice-to-have enhancements:
 
 ---
 
-**Last Updated**: Nov 7, 2025 (15:30)
-**Last Session**: Nov 7, 2025 - Completed Phase C.2 (OKR Frontend UI) - 2 hours, 1,086 lines of code
-**Next Session**: Phase C.3 (OKR Visualizations) - Estimated 6-8 hours
-**Previous Session**: Nov 6, 2025 (PM) - Completed Phase C.1 (OKR Backend) - 4 hours, 1,218 lines
+**Last Updated**: Nov 10, 2025 (08:45 UTC)
+**Last Session**: Nov 10, 2025 - Completed Phase C.5 (Nested OKR Dashboard) + Created deployment documentation
+**Next Session**: Wait for user verification, then proceed with Phase C.3 (OKR Visualizations) or user-requested features
+**Previous Session**: Nov 7, 2025 - Completed Phase C.2 (OKR Frontend UI) - 2 hours, 1,086 lines
+
+---
+
+## ⚠️ CRITICAL REMINDER for All Sessions
+
+**ALWAYS apply database migrations after deployment!**
+```bash
+docker compose exec backend alembic upgrade head
+docker compose restart backend
+```
+
+**See**: `DEPLOYMENT_CHECKLIST.md` for complete deployment procedures

@@ -470,7 +470,7 @@ def get_featured_objectives(
             department=obj.department,
             kpi_count=len(kpis),
             children_count=len(children),
-            is_featured=True,
+            is_featured=bool(obj.is_featured),
             kpis=kpis,
             children=[build_cascade_node(child) for child in children]
         )

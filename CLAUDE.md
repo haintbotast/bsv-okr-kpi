@@ -258,16 +258,87 @@ def _create_history(self, db: Session, kpi_id: int, user_id: int, action: str, .
 - Store with UUID filenames (never use original names)
 - Save in `/data/uploads/` outside web root
 
+## Database Migrations - CRITICAL ⚠️
+
+**MOST IMPORTANT**: When adding/modifying database columns, ALWAYS follow these steps:
+
+### Creating Migrations
+```bash
+# 1. After modifying models, create migration
+cd backend
+alembic revision --autogenerate -m "add is_featured to objectives"
+
+# 2. Review the generated migration file
+# Check: backend/alembic/versions/YYYYMMDD_HHMM_xxxxx_description.py
+
+# 3. Test locally
+alembic upgrade head  # Apply
+alembic downgrade -1  # Test rollback
+alembic upgrade head  # Re-apply
+
+# 4. Commit migration file to git
+git add backend/alembic/versions/
+git commit -m "Add migration: description"
+```
+
+### Applying Migrations in Production
+```bash
+# ⚠️ CRITICAL: Always run after pulling new code
+docker compose exec backend alembic upgrade head
+
+# Verify migration was applied
+docker compose exec backend alembic current
+
+# Restart backend to load new schema
+docker compose restart backend
+```
+
+### Common Migration Issues
+
+**Symptom**: `sqlite3.OperationalError: no such column: table_name.column_name`
+**Cause**: Migration not applied after deployment
+**Fix**:
+```bash
+docker compose exec backend alembic upgrade head
+docker compose restart backend
+```
+
+**Symptom**: Frontend shows "Failed to load data" after deployment
+**Cause**: Backend expecting new columns that don't exist in database
+**Fix**: Apply migrations as shown above
+
+### SQLite-Specific Migration Patterns
+```python
+# ❌ Wrong: Direct ALTER (fails on SQLite)
+def upgrade():
+    op.add_column('objectives', sa.Column('is_featured', ...))
+
+# ✅ Correct: Use batch_alter_table for SQLite
+def upgrade():
+    with op.batch_alter_table('objectives', schema=None) as batch_op:
+        batch_op.add_column(sa.Column('is_featured', sa.Integer(),
+                                       nullable=False, server_default='0'))
+```
+
+### Deployment Checklist Reference
+**See `DEPLOYMENT_CHECKLIST.md` for complete deployment procedures including:**
+- Pre-deployment verification
+- Migration application steps
+- Rollback procedures
+- Troubleshooting common issues
+
 ## Common Pitfalls
 
-1. **DateTime:** Never use `datetime.utcnow()` - it's deprecated
-2. **Pydantic:** Use `.model_validate()` not `.from_orm()`
-3. **Business Logic:** Keep it in services, not routes
-4. **Permissions:** Check in service layer, not just routes
-5. **State Changes:** Always log to kpi_history
-6. **SQLite:** Use WAL mode (already configured)
-7. **Frontend API:** Handle 401 for token refresh
-8. **Error Messages:** User-friendly on frontend, detailed in logs
+1. **Database Migrations:** ⚠️ **ALWAYS apply migrations after deployment** - Most common production issue!
+2. **DateTime:** Never use `datetime.utcnow()` - it's deprecated
+3. **Pydantic:** Use `.model_validate()` not `.from_orm()`
+4. **Business Logic:** Keep it in services, not routes
+5. **Permissions:** Check in service layer, not just routes
+6. **State Changes:** Always log to kpi_history
+7. **SQLite:** Use WAL mode (already configured), use `batch_alter_table` for migrations
+8. **Frontend API:** Handle 401 for token refresh
+9. **Error Messages:** User-friendly on frontend, detailed in logs
+10. **Migration Files:** Always commit to git, never skip in deployment
 
 ## Database Schema Quick Reference
 
