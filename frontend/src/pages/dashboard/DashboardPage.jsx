@@ -21,14 +21,25 @@ function DashboardPage() {
     try {
       setLoading(true)
       const currentYear = new Date().getFullYear()
-      const [kpiData, cascade, featured] = await Promise.all([
+
+      // Fetch critical data (KPIs and cascade view) - these must succeed
+      const [kpiData, cascade] = await Promise.all([
         kpiService.getDashboardStatistics(),
-        objectiveService.getCascadeView({ year: currentYear, level: 'company' }),
-        objectiveService.getFeaturedObjectives({ year: currentYear })
+        objectiveService.getCascadeView({ year: currentYear, level: 'company' })
       ])
+
       setStats(kpiData)
       setCascadeData(cascade)
-      setFeaturedObjectives(featured)
+
+      // Fetch featured objectives separately - optional, don't fail dashboard if this errors
+      try {
+        const featured = await objectiveService.getFeaturedObjectives({ year: currentYear })
+        setFeaturedObjectives(featured)
+      } catch (featuredError) {
+        console.warn('Failed to fetch featured objectives:', featuredError)
+        // Set empty array and continue - dashboard can still work without featured section
+        setFeaturedObjectives([])
+      }
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error)
       toast.error('Failed to load dashboard data')
